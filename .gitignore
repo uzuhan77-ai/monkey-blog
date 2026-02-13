@@ -1,0 +1,15 @@
+# Python 编译文件 (必须删)
+__pycache__/
+*.pyc
+
+# 虚拟环境 (这个绝对不能传上去，必须删)
+venv/
+.env
+
+
+# VS Code 编辑器配置 (可选，建议忽略)
+.vscode/
+.idea/
+
+# macOS 系统文件 (如果你不用 Mac 可忽略，但加上没坏处)
+.DS_Store
