@@ -2,11 +2,11 @@ import axios from 'axios'
 import constant from '../utils/constant'
 
 
-
-export function ApiArticleList() {
-    return axios.get(constant.baseURL + '/article/listArticle/')
+// 1. 获取文章列表 (改为 POST 请求，接收 data 参数，去掉末尾斜杠)
+export function ApiArticleList(data) {
+    return axios.post(constant.baseURL + '/article/listArticle',data)
 }
 
-export function ApiArticleDetail(id) {
-    return axios.get(constant.baseURL + '/article/detail/${id}/')
+export function ApiArticleDetail(params) {
+    return axios.get(constant.baseURL + '/article/getArticleById/',{params: params})
 }
