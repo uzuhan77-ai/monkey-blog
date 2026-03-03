@@ -6,6 +6,7 @@
         <input type="password" v-model="password" placeholder="密码" />
 
         <button @click="handleLogin">登录</button>
+        <button @click="router.push('/register')">没有账号？去注册</button>
         <p style="color: red;">{{ errorMessage }}</p>
     </div>
 
