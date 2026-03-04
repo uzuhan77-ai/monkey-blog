@@ -6,6 +6,26 @@ from django.utils import timezone
 
 # Create your models here.
 
+class Tag(models.Model):
+    name = models.CharField(max_length= 50 ,verbose_name= "标签名称")
+
+    def _str_(self):
+        return self.name
+
+    class Meta:
+        verbose_name= "标签"
+        verbose_name_plural= "标签"
+
+class Category(models.Model):
+    name = models.CharField(max_length= 50 ,verbose_name= "分类名称")
+
+    def _str_(self):
+        return self.name
+
+    class Meta:
+        verbose_name= "分类"
+        verbose_name_plural= "分类"
+
 
 
 class Article(models.Model):
@@ -17,6 +37,14 @@ class Article(models.Model):
     content= models.TextField(verbose_name="内容")
     #创建时间
     create_time= models.DateTimeField(default=timezone.now, verbose_name="创建时间")
+
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null= True,
+        blank= True,
+        verbose_name= "分类"
+    )
 
     # 这是为了让后台显示文章标题，而不是 "Article object (1)"
     def __str__(self):

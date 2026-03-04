@@ -12,9 +12,9 @@ export function ApiArticleDetail(params) {
 }
 
 export function ApiLogin(data) {
-    return axios.post(constant.baseURL + '/appone/login/',data)
+    return axios.post(constant.baseURL + '/user/login/',data)
 }
 
 export function ApiRegister(data) {
-    return axios.post(constant.baseURL + '/appone/register/',data)
+    return axios.post(constant.baseURL + '/user/register/',data)
 }
