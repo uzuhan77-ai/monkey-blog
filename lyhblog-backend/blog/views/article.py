@@ -1,8 +1,12 @@
 # 这里只保留文章需要的 import
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ..models import Article  # 注意这里变成了相对导入 '..'
-from ..serializers import ArticleSerializer  # 注意这里变成了相对导入 '..'
+from ..models import Article, Category # 注意这里变成了相对导入 '..'
+from ..serializers import ArticleSerializer, CategorySerializer # 注意这里变成了相对导入 '..'
+
+
+
+
 
 
 # 1. 文章列表接口 (post)
@@ -12,15 +16,20 @@ class ArticleListView(APIView):
         # 注意：前端传过来的可能是字符串，需要转成整数 int()
         current = int(request.data.get('current',1))
         size = int(request.data.get('size',10))
+        category_id = request.data.get('category_id')
+        queryset = Article.objects.all()
+
+        if category_id:
+            queryset = queryset.filter(category_id =category_id)
 
         # 2. 计算切片的起始和结束位置
         start = (current-1) * size
         end = start + size
 
         # 3. 先查询数据库里一共有多少篇文章（前端分页组件需要这个总数）
-        total = Article.objects.count()
+        total = queryset.count()
 
-        articles = Article.objects.all().order_by('-create_time')[start:end]
+        articles = queryset.order_by('-create_time')[start:end]
         serializer = ArticleSerializer(articles, many=True)
         return Response({
             "code": 200,

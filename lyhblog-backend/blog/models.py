@@ -9,7 +9,7 @@ from django.utils import timezone
 class Tag(models.Model):
     name = models.CharField(max_length= 50 ,verbose_name= "标签名称")
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -19,7 +19,7 @@ class Tag(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length= 50 ,verbose_name= "分类名称")
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -44,6 +44,12 @@ class Article(models.Model):
         null= True,
         blank= True,
         verbose_name= "分类"
+    )
+
+    tags = models.ManyToManyField(
+        Tag,
+        blank = True,
+        verbose_name="标签"
     )
 
     # 这是为了让后台显示文章标题，而不是 "Article object (1)"

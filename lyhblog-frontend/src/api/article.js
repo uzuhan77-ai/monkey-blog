@@ -18,3 +18,7 @@ export function ApiLogin(data) {
 export function ApiRegister(data) {
     return axios.post(constant.baseURL + '/user/register/',data)
 }
+
+export function ApiCategoryList () {
+    return axios.get(constant.baseURL + '/category/listCategory/')
+}
