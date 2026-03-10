@@ -14,7 +14,7 @@
 
         <hr>
         <div style="white-space:pre-wrap ;">
-
+            {{ article.content }}
         </div>
     </div>
 
@@ -32,10 +32,10 @@ const loading = ref(true)
 
 
 onMounted(async () => {
-    const id = route.params.id
+    const id = route.query.id
 
     try{
-        const res = await ApiArticleDetail(id)
+        const res = await ApiArticleDetail({id: id})
         console.log('详情数据：', res.data)
 
         article.value = res.data.data

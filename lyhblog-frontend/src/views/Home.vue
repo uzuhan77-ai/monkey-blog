@@ -1,6 +1,26 @@
 <template>
     <div>
         <h1>文章列表</h1>
+        <div>
+            <span style="margin-right: 10px;">分类筛选</span>
+
+            <el-button 
+                :type="activeCategoryId === null ? 'primary' : 'default'"
+                size="small"
+                @click="handleCategoryClick(null)"
+            >全部</el-button>
+
+            <el-button 
+                v-for="cat in categoryList"
+                :key= "cat.id"
+                :type="activeCategoryId === cat.id ? 'primary' : 'default'"
+                size = "small"
+                @click="handleCategoryClick(cat.id)"
+                style="margin-right: 10px;"
+            >
+                {{ cat.name }}
+            </el-button>
+        </div>
     </div>
     <div v-for="item in articleList" :key="item.id"
         style=" margin-bottom: 30px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">
@@ -18,7 +38,7 @@
                 标签:
                 <span v-for="tag in item.tags" :key="tag.id" 
                     style= "margin-left: 5px; background: #f0f9eb; color:#409Efe;
-                     padding: 2px 6px; border-radius: 4px; border: 1px solid #e1f3d8;""
+                     padding: 2px 6px; border-radius: 4px; border: 1px solid #e1f3d8;"
                 >
                     {{ tag.name }}
                 </span>
@@ -46,7 +66,7 @@ import {useRouter} from 'vue-router'
 const router = useRouter()
 const articleList = ref([])
 const current = ref(1)
-const size = ref(1)
+const size = ref(6)
 const total = ref(0)
 
 const categoryList = ref([]) //分类列表
@@ -56,7 +76,7 @@ const getArticleList = async () => {
         const res = await ApiArticleList(
         { current: current.value,
           size: size.value,
-          category_id: activeCategoryId.id
+          category_id: activeCategoryId.value
         })
         if (res.data.code == 200){
             articleList.value = res.data.data
@@ -79,7 +99,7 @@ const getCategoryList = async () => {
         }
 }
 
-onMounted(async () => {
+onMounted( () => {
     getArticleList()
     getCategoryList()
 })
@@ -88,11 +108,20 @@ const handlePageChange = (newPage) => {
     getArticleList() //重新获取文章列表
 }
 
-const goToDetail = (categoryId) => {
+const goToDetail = (id) => {
     router.push({
         path: '/article',
-        query: { id }
+        query: { id: id }
     })
+}
+
+const handleCategoryClick = (categoryId) => {
+    //记录当前分类
+    activeCategoryId.value = categoryId
+
+    //切换分类是回到第一页
+    current.value = 1
+    getArticleList()
 }
 
 </script>
