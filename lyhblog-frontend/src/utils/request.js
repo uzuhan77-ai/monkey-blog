@@ -13,8 +13,8 @@ request.interceptors.request.use(
     config =>{
         const token = localStorage.getItem('user_token')
         if(token){
-            // 请求头最终变成：Authorization: Bearer xxxxxxx
-            config.headers['Authorization'] = `Bearer ${token}`
+            // 请求头最终变成：Authorization: Token xxxxxxx
+            config.headers['Authorization'] = `Token ${token}`
         }
         return config
     }, error =>{
@@ -33,7 +33,7 @@ request.interceptors.response.use(
             console.log("身份验证失败，请重新登录")
             // 清楚本地失效的 TOKEN
             localStorage.removeItem('user_token')
-            // 跳回登录
+            // 跳回登录  
             router.push('/login')
         }
         return Promise.reject(error)

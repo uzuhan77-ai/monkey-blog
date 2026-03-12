@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Article, Category, Tag
+from .models import Article, Category, Tag, Comment
+
 
 # 1. 新增：分类序列化器
 class CategorySerializer(serializers.ModelSerializer):
@@ -29,3 +30,15 @@ class ArticleSerializer(serializers.ModelSerializer):
         # 这里定义你想传给前端哪些字段
         # 如果你的模型字段名和这里不一样，请核对 models.py
         fields = ['id', 'title', 'summary', 'content', 'create_time', 'tags', 'category']
+
+
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    #技巧核心：额外加一个字段 username 字段, 把 user 外键里的 username 读出来发给前端
+    username = serializers.CharField(source='user.username', read_only= True)
+    create_time = serializers.DateTimeField(format = "%Y-%m-%d %H:%M:%S", read_only= True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'create_time', 'article', 'user', 'username']
