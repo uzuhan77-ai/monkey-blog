@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import (TestView, ArticleListView, ArticleDetailView, LoginView, RegisterView, CategoryListView,
+from .views import (TestView, ArticleListView, ArticleDetailView,ArticleAddView, ArticleDeleteView, ArticleUpdateView,
+                    LoginView, RegisterView, CategoryListView,
                     CommentListView, CommentAddView)
 
 urlpatterns = [
@@ -9,6 +10,9 @@ urlpatterns = [
 
     path('article/listArticle/', ArticleListView.as_view(), name='article-list'),
     path('article/getArticleById/', ArticleDetailView.as_view(), name= 'article-detail'),
+    path('article/add/', ArticleAddView.as_view(), name= 'article-add'),
+    path('article/delete/', ArticleDeleteView.as_view(), name=' article-delete'),
+    path('article/update/', ArticleUpdateView.as_view(), name=' article-update'),
 
     path('user/login/', LoginView.as_view(), name='login'),
     path('user/register/', RegisterView.as_view(), name='register'),
@@ -17,5 +21,6 @@ urlpatterns = [
 
     path('comment/list/', CommentListView.as_view(), name= 'comment-list'),
     path('comment/add/', CommentAddView.as_view(), name= 'comment-add'),
+
 
 ]

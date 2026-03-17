@@ -12,6 +12,18 @@ export function ApiArticleDetail(params) {
     return request.get('/article/getArticleById/',{params: params})
 }
 
+export function ApiArticleAdd(data) {
+    return request.post('/article/add/',data)
+}
+
+export function ApiArticleDelete(data) {
+    return request.post('/article/delete/',data)
+}
+
+export function ApiArticleUpdate(data) {
+    return request.post('/article/update/',data)
+}
+
 export function ApiLogin(data) {
     return request.post('/user/login/',data)
 }

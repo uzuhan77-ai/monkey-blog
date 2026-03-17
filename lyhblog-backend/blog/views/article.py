@@ -30,7 +30,7 @@ class ArticleListView(APIView):
         # 3. 先查询数据库里一共有多少篇文章（前端分页组件需要这个总数）
         total = queryset.count()
 
-        articles = queryset.order_by('-create_time')[start:end]
+        articles = queryset.order_by('create_time')[start:end]
         serializer = ArticleSerializer(articles, many=True)
         return Response({
             "code": 200,
@@ -60,9 +60,9 @@ class ArticleDetailView(APIView):
         })
 
 
-#3、 新增文章接口（POST0）
+#3、 新增文章接口（POST）
 class ArticleAddView(APIView):
-    permission_classer = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self,request):
         title = request.data.get('title')
@@ -83,7 +83,7 @@ class ArticleAddView(APIView):
             title = title,
             content = content,
             summary = summary,
-            categoty_id = category_id
+            category = category_id
         )
         #2、再绑定多对多的关系的标签
         if tags:
@@ -99,7 +99,7 @@ class ArticleUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,request):
-        article_id = request.data.get('article_id')
+        article_id = request.data.get('id')
         if not article_id:
             return Response({
                 "code": 400,
@@ -128,5 +128,26 @@ class ArticleUpdateView(APIView):
             "code": 200,
             "message": "文章修改成功!"
         })
+#删除文章接口（POST）
+class ArticleDeleteView(APIView):
+    permission_classes =[IsAuthenticated]
 
-
+    def post(self,request):
+        article_id = request.data.get('id')
+        if not article_id:
+            return Response({
+                "code": 400,
+                "message": "缺少文章id"
+            },status=400)
+        try:
+            article = Article.objects.get(id=article_id)
+            article.delete() #删除
+            return Response({
+                "code":200,
+                "message": "文章删除成功"
+            })
+        except Article.DoesNotExist:
+            return Response({
+                "code":404,
+                "message":"文章不存在"
+            },status=404)
