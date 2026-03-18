@@ -50,10 +50,12 @@
         v-model="dialogVisable"
         width="60%"
     >
-        <el-form-item label="标题">
-            <el-input v-model="formData.title"></el-input>
-
-            <el-input label="分类">
+        <el-form :model="formData" label-width="80px">
+            <el-form-item label="标题">
+                <el-input v-model="formData.title"></el-input>
+            </el-form-item>
+            
+            <el-form-item label="分类">
                 <el-select v-model="formData.category_id" style="width: 100%;">
                     <el-option
                         v-for="cat in categoryList" 
@@ -62,13 +64,13 @@
                         :value="cat.id"
                         />
                 </el-select>
-            </el-input>
-        </el-form-item>
-    
-        <el-form-item label="正文">
-            <el-input type="textarea" row="8" v-model="formData.content"></el-input>
-        </el-form-item>
-
+            </el-form-item>
+            
+        
+            <el-form-item label="正文">
+                <el-input type="textarea" row="8" v-model="formData.content"></el-input>
+            </el-form-item>
+        </el-form>
         <template #footer>
             <el-button @click="dialogVisable= false">取消</el-button>
             <el-button type="primary" @click="saveArticle">保存</el-button>
@@ -179,12 +181,11 @@ const handlePageChange = (newPage) => {
 
 const openEditDialog = (row) => {
     isEdit.value= true
-    formData.value = false
 
     formData.value={
-        id: null,
+        id: row.id,
         title: row.title,
-        category_id: row.category_id ? row.category_id : null,
+        category_id: row.category ? row.category.id : null,
         content: row.content
     }
     dialogVisable.value= true
