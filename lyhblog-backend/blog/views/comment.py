@@ -58,6 +58,57 @@ class CommentAddView(APIView):
             "data": serializer.data
         })
 
+#     3.后台：获取所有评论列表（POST，带分页）
+class AdminCommentListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        current = int(request.data.get('current',1))
+        size = int(request.data.get('size',10))
+
+        #获取所有评论
+        queryset = Comment.objects.all()
+        total = queryset.count()
+        # 场景
+        # B：用户点到了第2页(current=2, size=10)
+        # start = (2 - 1) * 10 = 10
+        # end = 10 + 10 = 20
+        start = (current - 1) * size
+        end = start + size
+
+        comments = queryset[start:end]
+        serialize = CommentSerializer(comments, many= True)
+
+        return Response({
+            "code": 200,
+            "message": "获取所有评论成功",
+            "total": total,
+            "data": serialize.data
+        })
+#4.后台：删除评论（POST）
+class AdminCommentDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        comment_id = request.data.get('id')
+        if not comment_id :
+            return Response({
+                "code": 400,
+                "message":"缺少评论id",
+            },status = 400)
+
+        try:
+            comment = Comment.objects.get(id = comment_id)
+            comment.delete()
+            return Response({
+                "code": 200,
+                "message": "评论删除成功",
+            })
+        except Comment.DoesNotExist:
+            return Response({
+                "code": 404,
+                "message": "评论不存在"
+            },status=404)
 
 
 

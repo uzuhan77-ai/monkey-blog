@@ -1,5 +1,5 @@
 # 这里只保留文章需要的 import
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import Article, Category # 注意这里变成了相对导入 '..'
@@ -63,6 +63,7 @@ class ArticleDetailView(APIView):
 #3、 新增文章接口（POST）
 class ArticleAddView(APIView):
     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def post(self,request):
         title = request.data.get('title')
@@ -83,7 +84,7 @@ class ArticleAddView(APIView):
             title = title,
             content = content,
             summary = summary,
-            category = category_id
+            category_id = category_id
         )
         #2、再绑定多对多的关系的标签
         if tags:
@@ -97,6 +98,7 @@ class ArticleAddView(APIView):
 #4、修改文章接口（POST）
 class ArticleUpdateView(APIView):
     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def post(self,request):
         article_id = request.data.get('id')
@@ -131,6 +133,7 @@ class ArticleUpdateView(APIView):
 #删除文章接口（POST）
 class ArticleDeleteView(APIView):
     permission_classes =[IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def post(self,request):
         article_id = request.data.get('id')

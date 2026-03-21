@@ -29,7 +29,10 @@ class LoginView(APIView):
             return Response({
                 "code": 200,
                 "message": "登录成功!",
-                "token": token.key
+                "token": token.key,
+                ## 👇 新增这两行：把身份和名字告诉前端
+                "is_admin": user.is_superuser,
+                "username": user.username,
             })
 
 

@@ -22,32 +22,36 @@
             </el-button>
         </div>
     </div>
-    <div v-for="item in articleList" :key="item.id"
-        style=" margin-bottom: 30px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">
-        <h2>{{ item.title }}</h2>
-        <div>
-            <!-- 分类栏 -->
-            <span v-if="item.category" style="color:#409Eff; font-weight: bold">
-                分类: {{ item.category.name }}
-            </span>
-            <span v-else>
-                分类: 未分类
-            </span>
-            <!-- 标签栏 -->
-            <span v-if="item.tags && item.tags.length >0" style="margin-left:15px; ">
-                标签:
-                <span v-for="tag in item.tags" :key="tag.id" 
-                    style= "margin-left: 5px; background: #f0f9eb; color:#409Efe;
-                     padding: 2px 6px; border-radius: 4px; border: 1px solid #e1f3d8;"
-                >
-                    {{ tag.name }}
+    <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col
+            v-for="item in articleList"
+            :key="item.id"
+        >
+            <h2>{{ item.title }}</h2>
+            <div>
+                <!-- 分类栏 -->
+                <span v-if="item.category" style="color:#409Eff; font-weight: bold">
+                    分类: {{ item.category.name }}
                 </span>
-            </span>
-        </div>
-
+                <span v-else>
+                    分类: 未分类
+                </span>
+                <!-- 标签栏 -->
+                <span v-if="item.tags && item.tags.length >0" style="margin-left:15px; ">
+                    标签:
+                    <span v-for="tag in item.tags" :key="tag.id" 
+                        style= "margin-left: 5px; background: #f0f9eb; color:#409Efe;
+                        padding: 2px 6px; border-radius: 4px; border: 1px solid #e1f3d8;"
+                    >
+                        {{ tag.name }}
+                    </span>
+                </span>
+            </div>
+        </el-col>
+    </el-row>
         <p>{{ item.create_time }}</p>
         <button @click="goToDetail(item.id)">查看详情</button>
-    </div>
+
     <el-pagination
         background
         layout="total, prev, pager, next"

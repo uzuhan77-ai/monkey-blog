@@ -36,6 +36,8 @@ const handleLogin =async () => {
         if (res.data.code === 200) {
             errorMessage.value = "登录成功"
             localStorage.setItem('user_token',res.data.token)
+            localStorage.setItem('is_admin',res.data.is_admin)
+            localStorage.setItem('username',res.data.username)
             const redirect = route.query.redirect || '/'
             router.push(redirect)
         } else {

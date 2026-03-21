@@ -46,3 +46,12 @@ export function ApiCommentList(params) {
 export function ApiCommentAdd(data) {
     return request.post('/comment/add/',data)
 }
+
+
+export function ApiAdminCommentList(data) {
+    return request.post('/comment/adminlist/',data)
+}
+
+export function ApiAdminCommentDelete(data) {
+    return request.post('/comment/admindelete/',data)
+}

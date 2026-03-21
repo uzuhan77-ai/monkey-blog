@@ -39,6 +39,8 @@ class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only= True)
     create_time = serializers.DateTimeField(format = "%Y-%m-%d %H:%M:%S", read_only= True)
 
+    article_title = serializers.CharField(source='article.title', read_only= True)
+
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'create_time', 'article', 'user', 'username']
+        fields = ['id', 'content', 'create_time', 'article', 'user', 'username', 'article_title']
