@@ -1,131 +1,186 @@
 <template>
     <div>
-        <h1>文章列表</h1>
-        <div>
-            <span style="margin-right: 10px;">分类筛选</span>
-
-            <el-button 
-                :type="activeCategoryId === null ? 'primary' : 'default'"
-                size="small"
-                @click="handleCategoryClick(null)"
-            >全部</el-button>
-
-            <el-button 
-                v-for="cat in categoryList"
-                :key= "cat.id"
-                :type="activeCategoryId === cat.id ? 'primary' : 'default'"
-                size = "small"
-                @click="handleCategoryClick(cat.id)"
-                style="margin-right: 10px;"
-            >
-                {{ cat.name }}
-            </el-button>
-        </div>
-    </div>
-    <el-row :gutter="20" style="margin-top: 20px;">
-        <el-col
-            v-for="item in articleList"
-            :key="item.id"
+      <h1>文章列表</h1>
+  
+      <!-- 分类筛选 -->
+      <div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <span style="margin-right: 10px;">分类筛选</span>
+  
+        <el-button 
+          :type="activeCategoryId === null ? 'primary' : 'default'"
+          size="small"
+          @click="handleCategoryClick(null)"
+        >全部</el-button>
+  
+        <el-button 
+          v-for="cat in categoryList"
+          :key="cat.id"
+          :type="activeCategoryId === cat.id ? 'primary' : 'default'"
+          size="small"
+          @click="handleCategoryClick(cat.id)"
+          style="margin-right: 10px;"
         >
-            <h2>{{ item.title }}</h2>
-            <div>
-                <!-- 分类栏 -->
-                <span v-if="item.category" style="color:#409Eff; font-weight: bold">
-                    分类: {{ item.category.name }}
+          {{ cat.name }}
+        </el-button>
+      </div>
+  
+      <!-- 文章列表 -->
+      <el-row :gutter="20">
+        <el-col
+          v-for="item in articleList"
+          :key="item.id"
+          :xs="24"
+          :sm="12"
+          :md="8"
+          style="margin-bottom: 20px"
+        >
+          <el-card 
+            class="article-card"
+            shadow="hover" 
+            @click="goToDetail(item.id)"
+          >
+  
+            <!-- 标题 -->
+            <h3 style="margin:0 0 10px 0; font-size:18px;">
+              {{ item.title }}
+            </h3>
+  
+            <!-- 内容摘要 -->
+            <p style="color:#606266; font-size:14px;">
+              {{ item.content?.substring(0,50) || '暂无内容' }}
+            </p>
+  
+            <!-- 分类 + 标签 -->
+            <div style="margin-top:10px;">
+              <span v-if="item.category" style="color:#409EFF; font-weight: bold">
+                {{ item.category.name }}
+              </span>
+              <span v-else>
+                未分类
+              </span>
+  
+              <span v-if="item.tags && item.tags.length > 0" style="margin-left:10px;">
+                <span v-for="tag in item.tags" :key="tag.id" class="tag">
+                  {{ tag.name }}
                 </span>
-                <span v-else>
-                    分类: 未分类
-                </span>
-                <!-- 标签栏 -->
-                <span v-if="item.tags && item.tags.length >0" style="margin-left:15px; ">
-                    标签:
-                    <span v-for="tag in item.tags" :key="tag.id" 
-                        style= "margin-left: 5px; background: #f0f9eb; color:#409Efe;
-                        padding: 2px 6px; border-radius: 4px; border: 1px solid #e1f3d8;"
-                    >
-                        {{ tag.name }}
-                    </span>
-                </span>
+              </span>
             </div>
+  
+            <!-- 时间 + 按钮 -->
+            <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:#999; font-size:12px;">
+                {{ item.create_time }}
+              </span>
+  
+              <el-button type="primary" text size="small">
+                阅读全文 ➔
+              </el-button>
+            </div>
+  
+          </el-card>
         </el-col>
-    </el-row>
-        <p>{{ item.create_time }}</p>
-        <button @click="goToDetail(item.id)">查看详情</button>
-
-    <el-pagination
-        background
-        layout="total, prev, pager, next"
-        :total="total"
-        :page-size="size"
-        v-model:current-page="current"
-        @current-change="handlePageChange"
-    
-    />
-</template>
-
-<script setup>
-import { ref,onMounted } from 'vue'
-import { ApiArticleList, ApiCategoryList } from '../api/article'
-import {useRouter} from 'vue-router'
-const router = useRouter()
-const articleList = ref([])
-const current = ref(1)
-const size = ref(6)
-const total = ref(0)
-
-const categoryList = ref([]) //分类列表
-const activeCategoryId = ref(null) //当前选中的分类
-const getArticleList = async () => {
-    try{
-        const res = await ApiArticleList(
-        { current: current.value,
-          size: size.value,
-          category_id: activeCategoryId.value
-        })
-        if (res.data.code == 200){
-            articleList.value = res.data.data
-            total.value = res.data.total
-        }
-    }
-    catch(error){
-            console.error(error)
-    }
-}
-
-const getCategoryList = async () => {
+      </el-row>
+  
+      <!-- 分页 -->
+      <div style="display:flex; justify-content:center; margin-top:20px;">
+        <el-pagination
+          background
+          layout="total, prev, pager, next"
+          :total="total"
+          :page-size="size"
+          v-model:current-page="current"
+          @current-change="handlePageChange"
+        />
+      </div>
+  
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from 'vue'
+  import { ApiArticleList, ApiCategoryList } from '../api/article'
+  import { useRouter } from 'vue-router'
+  
+  const router = useRouter()
+  
+  const articleList = ref([])
+  const current = ref(1)
+  const size = ref(6)
+  const total = ref(0)
+  
+  const categoryList = ref([])
+  const activeCategoryId = ref(null)
+  
+  const getArticleList = async () => {
     try {
-        const res = await ApiCategoryList()
-        if (res.data.code == 200){
-            categoryList.value = res.data.data
-        }
-    }catch(error){
-            console.error(error)
-        }
-}
-
-onMounted( () => {
+      const res = await ApiArticleList({
+        current: current.value,
+        size: size.value,
+        category_id: activeCategoryId.value
+      })
+      if (res.data.code == 200) {
+        articleList.value = res.data.data
+        total.value = res.data.total
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  const getCategoryList = async () => {
+    try {
+      const res = await ApiCategoryList()
+      if (res.data.code == 200) {
+        categoryList.value = res.data.data
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  onMounted(() => {
     getArticleList()
     getCategoryList()
-})
-const handlePageChange = (newPage) => {
-    current.value = newPage //更新当前页码
-    getArticleList() //重新获取文章列表
-}
-
-const goToDetail = (id) => {
+  })
+  
+  const handlePageChange = (newPage) => {
+    current.value = newPage
+    getArticleList()
+  }
+  
+  const goToDetail = (id) => {
     router.push({
-        path: '/article',
-        query: { id: id }
+      path: '/article',
+      query: { id }
     })
-}
-
-const handleCategoryClick = (categoryId) => {
-    //记录当前分类
+  }
+  
+  const handleCategoryClick = (categoryId) => {
     activeCategoryId.value = categoryId
-
-    //切换分类是回到第一页
     current.value = 1
     getArticleList()
-}
-
-</script>
+  }
+  </script>
+  
+  <style scoped>
+  .tag {
+    margin-left: 5px;
+    background: #ecf5ff;
+    color: #409eff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  
+  .article-card {
+    cursor: pointer;
+    transition: all 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .article-card:hover {
+    transform: translateY(-5px);
+  }
+  </style>

@@ -20,7 +20,7 @@
         <hr>
         <h3>评论{{ commentList.length }}条</h3>
         <!-- 输入评论框 -->
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px;" v-if="isLogin">
             <textarea v-model="commentContent"
                 placeholder="写下你的评论"
                 rows="3"
@@ -46,10 +46,13 @@
 
 <script setup>
 import {ref, onMounted} from 'vue'
-import { useRoute} from 'vue-router'
+import { useRoute,useRouter} from 'vue-router'
 import { ApiArticleDetail, ApiCommentList, ApiCommentAdd } from '../api/article'
+import {ElMessage} from 'element-plus'
 
 const route = useRoute()
+const router = useRouter()
+const isLogin = ref(false)
 
 const article = ref(null)
 const loading = ref(true)
@@ -60,6 +63,10 @@ const commentContent = ref('')
 
 onMounted(async () => {
     const id = route.query.id
+    // 检查登录状态
+    if( localStorage.getItem('user_token')){
+        isLogin.value = true
+    }
 
     try{
         const res = await ApiArticleDetail({
@@ -83,9 +90,17 @@ onMounted(async () => {
 })
 
 const submitComment = async () =>{
+    // 检查登录
+    if(!isLogin.value){
+        ElMessage.warning('请先登录')
+        router.push('/login')
+        return
+    }
+
+
     // 检查是否输入内容
     if (!commentContent.value.trim()){
-        alert('评论不能为空')
+        ElMessage.warning('评论不能为空')
         return
     }
     try{
@@ -95,7 +110,7 @@ const submitComment = async () =>{
             content: commentContent.value
         })
         if (res.data.code === 200){
-            alert('评论成功')
+            ElMessage.success('评论成功')
             // 清空输入框
             commentContent.value = ''
 
@@ -110,6 +125,7 @@ const submitComment = async () =>{
         }
     }catch(error){
         console.error('发表评论失败', error)
+        ElMessage.error('评论失败，请稍后再试')
     }
 }
 
