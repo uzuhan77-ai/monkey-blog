@@ -16,6 +16,7 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ApiLogin } from '../api/article'
+import { useUserStore } from '../stores/user'
 const router = useRouter()
 const route = useRoute()
 const account = ref('')
@@ -32,19 +33,17 @@ const handleLogin =async () => {
             password: password.value,
             province: ''
         })
-        console.log(res.data)
         if (res.data.code === 200) {
-            errorMessage.value = "登录成功"
-            localStorage.setItem('user_token',res.data.token)
-            localStorage.setItem('is_admin',res.data.is_admin)
-            localStorage.setItem('username',res.data.username)
+            // 保存 token
+            userStore.setToken(res.data.token)
+
+            ElMessage.success('登录成功')
+
             const redirect = route.query.redirect || '/'
             router.push(redirect)
-        } else {
-        errorMessage.value = res.data.message
         }
     }catch(error){
-        errorMessage.value = "服务器错误"
+        ElMessage.error('登录失败')
     }
     
 }

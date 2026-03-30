@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '../stores/user'
 const routes = [
     {
         path: '/',
@@ -20,12 +21,13 @@ const routes = [
         name: 'Register',
         component: () => import('../views/register.vue')
     },
-    // 后台管理的嵌套路由
+    // 后台管理的嵌套路由 (需要登录)
     {
         path: '/admin',
         name: 'Admin',
         component: () => import('../views/admin/AdminLayout.vue'),
-        redirect: '/admin/article',
+        meta:{ requiresAuth: true }, //标记需要登录
+        redirect: '/admin/article', 
         children: [
             {
                 path: 'article', //子路由前面不用加/
