@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user',{
         // 登录
         setToken(token){
             this.token = token
-            localStorage.getItem('token',token)
+            localStorage.setItem('token',token)
         },
 
         // 登出
@@ -17,10 +17,9 @@ export const useUserStore = defineStore('user',{
             this.token = ''
             this.userInfo = null
             localStorage.removeItem('token')
-        },
-
-        getters: {
-            islogin: state => !!state.token
         }
+    },
+    getters: {
+        isLogin: state => !!state.token
     }
 })
