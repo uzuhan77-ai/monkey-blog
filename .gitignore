@@ -12,4 +12,5 @@ venv/
 .idea/
 
 # macOS 系统文件 (如果你不用 Mac 可忽略，但加上没坏处)
-.DS_Store
+.DS_Storedocs/当前任务-Day1修复计划.md
+docs/当前进度评估.md
