@@ -37,10 +37,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     #技巧核心：额外加一个字段 username 字段, 把 user 外键里的 username 读出来发给前端
     username = serializers.CharField(source='user.username', read_only= True)
-    create_time = serializers.DateTimeField(format = "%Y-%m-%d %H:%M:%S", read_only= True)
-
-    article_title = serializers.CharField(source='article.title', read_only= True)
-
+    # create_time = serializers.DateTimeField(format = "%Y-%m-%d %H:%M:%S", read_only= True)
+    # article_title = serializers.CharField(source='article.title', read_only= True)
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'create_time', 'article', 'user', 'username', 'article_title']
+        fields = ['id', 'content', 'create_time', 'article', 'username']

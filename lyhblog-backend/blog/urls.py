@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (TestView, ArticleListView, ArticleDetailView,ArticleAddView, ArticleDeleteView, ArticleUpdateView,
                     LoginView, RegisterView, CategoryListView,
-                    CommentListView, CommentAddView, AdminCommentListView, AdminCommentDeleteView)
+                    )
+from .views.comment import CommentListView, CommentAddView,CommentDeleteView
 
 urlpatterns = [
     # 访问路径: /api/test/
@@ -19,10 +20,10 @@ urlpatterns = [
 
     path('category/listCategory/', CategoryListView.as_view(), name='category-list'),
 
-    path('comment/list/', CommentListView.as_view(), name= 'comment-list'),
-    path('comment/add/', CommentAddView.as_view(), name= 'comment-add'),
-    path('comment/adminlist/',AdminCommentListView.as_view(), name='admin-comment'),
-    path('comment/admindelete/',AdminCommentDeleteView.as_view(),name='admin-delete'),
+    path('comment/list/', CommentListView.as_view()),
+    path('comment/add/', CommentAddView.as_view()),
+    # path('comment/adminlist/',AdminCommentListView.as_view(), name='admin-comment'),
+    path('comment/admindelete/',CommentDeleteView.as_view()),
 
 
 ]
