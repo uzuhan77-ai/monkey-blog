@@ -23,6 +23,7 @@ const article = ref({})
 
 const getArticle = async () => {
   const id = route.query.id
+  if (!id) return 
   const res = await ApiArticleDetail(id)
   if (res.data.code === 200) {
     article.value = res.data.data
@@ -33,4 +34,3 @@ onMounted(() => {
   getArticle()
 })
 </script>
-```

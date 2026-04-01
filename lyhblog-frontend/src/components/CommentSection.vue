@@ -7,7 +7,7 @@
             <el-input
                 v-model="commentContent"
                 type="textarea"
-                :row="3"
+                :rows="3"
                 placeholder="writedown your comments"
             />
             <el-button
@@ -33,7 +33,7 @@
                     <span class="username">{{ item.username }}</span>
                     <span class="time">{{ item.create_time }}</span>
                 </div>
-                <div class="comment-list">{{ item.content }}</div>
+                <div class="comment-content">{{ item.content }}</div>
             </div>
 
             <el-empty v-if="comments.length === 0" description="暂无评论" />
@@ -43,6 +43,7 @@
 
 <script setup>
 import {ref, onMounted, computed} from 'vue'
+import { useRouter } from 'vue-router'
 import {ApiCommentList, ApiCommentAdd} from '../api/comment'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '../stores/user'
@@ -50,11 +51,11 @@ import { useUserStore } from '../stores/user'
 const props = defineProps({
     articleId:{
         type:Number,
-        require:true
+        required:true
     }
 })
 
-const router = usrRouter()
+const router = useRouter()
 const useStore = useUserStore()
 const isLogin = computed(() => useStore.isLogin)
 
@@ -78,7 +79,7 @@ const loadComments = async () =>{
 
 const handleSubmit = async () =>{
     try{
-        if(!commentContent.vlaue){
+        if(!commentContent.value.trim()){
             ElMessage.warning('请输入评论内容')
             return
         }
@@ -86,13 +87,13 @@ const handleSubmit = async () =>{
             article_id:props.articleId,
             content:commentContent.value,
         })
-        if(res.data.code=200){
+        if(res.data.code==200){
             ElMessage.success('评论成功')
             commentContent.value=''
             loadComments()
         }
     }catch(error){
-        ElMessage.success('评论失败')
+        ElMessage.error('评论失败')
     }finally{
         submitting.value = false
     }
@@ -154,4 +155,3 @@ onMounted(() =>{
   line-height: 1.6;
 }
 </style>
-```

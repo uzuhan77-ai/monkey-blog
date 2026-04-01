@@ -8,8 +8,8 @@ export function ApiArticleList(data) {
     return request.post('/article/listArticle/',data)
 }
 
-export function ApiArticleDetail(params) {
-    return request.get('/article/getArticleById/',{params: params})
+export function ApiArticleDetail(id) {
+    return request.get('/article/getArticleById/', { params: { id } })
 }
 
 export function ApiArticleAdd(data) {
@@ -34,24 +34,4 @@ export function ApiRegister(data) {
 
 export function ApiCategoryList () {
     return request.get('/category/listCategory/')
-}
-
-//获取某篇文章的评论列表 (GET)
-export function ApiCommentList(params) {
-    return request.get('/comment/list/',{params: params})
-}
-
-
-//发表评论 (POST)
-export function ApiCommentAdd(data) {
-    return request.post('/comment/add/',data)
-}
-
-
-export function ApiAdminCommentList(data) {
-    return request.post('/comment/adminlist/',data)
-}
-
-export function ApiAdminCommentDelete(data) {
-    return request.post('/comment/admindelete/',data)
 }
