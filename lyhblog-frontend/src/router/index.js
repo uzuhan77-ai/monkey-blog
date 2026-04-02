@@ -24,24 +24,34 @@ const routes = [
     // 后台管理的嵌套路由 (需要登录)
     {
         path: '/admin',
-        name: 'Admin',
-        component: () => import('../views/admin/AdminLayout.vue'),
+        component: () => import('../views/admin/Layout.vue'),
         meta:{ requiresAuth: true }, //标记需要登录
         redirect: '/admin/article', 
         children: [
             {
                 path: 'article', //子路由前面不用加/
                 name: 'AdminArticle',
-                component: () => import('../views/admin/ArticleManage.vue')
+                component: () => import('../views/admin/ArticleList.vue')
 
+            },
+            {
+                path: 'article/add',
+                name: 'AdminArticleAdd',
+                conponent: () => import('../views/admin/ArticleEdit.vue')
+            },
+            {
+                path: 'article/edit/:id',
+                name: 'AdminArticleEdit',
+                conponent: () => import('../views/admin/ArticleEdit.vue')
             },
             {
                 path: 'comment',
                 name: 'AdminComment',
-                component: () => import('../views/admin/AdminComment.vue')
+                conponent: () => import('../views/admin/CommentList.vue')
             }
         ]
     }
+    
 
 
 

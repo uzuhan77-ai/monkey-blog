@@ -24,6 +24,7 @@
         </el-button>
       </div>
   
+      <el-skeleton v-if="loading" :rows="5" animated/>
       <!-- 文章列表 -->
       <el-row :gutter="20">
         <el-col
@@ -101,6 +102,7 @@
   import { ApiArticleList, ApiCategoryList } from '../api/article'
   import { useRouter } from 'vue-router'
   
+  const loading = ref(false)
   const router = useRouter()
   
   const articleList = ref([])
@@ -112,6 +114,7 @@
   const activeCategoryId = ref(null)
   
   const getArticleList = async () => {
+    loading.value = true
     try {
       const res = await ApiArticleList({
         current: current.value,
@@ -123,7 +126,9 @@
         total.value = res.data.total
       }
     } catch (error) {
-      console.error(error)
+      ElMessage.error('加载失败')
+    } finally {
+      loading.value = false
     }
   }
   

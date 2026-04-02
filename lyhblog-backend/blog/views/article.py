@@ -30,7 +30,7 @@ class ArticleListView(APIView):
         # 3. 先查询数据库里一共有多少篇文章（前端分页组件需要这个总数）
         total = queryset.count()
 
-        articles = queryset.order_by('create_time')[start:end]
+        articles = queryset.order_by('-create_time')[start:end]
         serializer = ArticleSerializer(articles, many=True)
         return Response({
             "code": 200,
@@ -62,8 +62,7 @@ class ArticleDetailView(APIView):
 
 #3、 新增文章接口（POST）
 class ArticleAddView(APIView):
-    permission_classes = [IsAuthenticated]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated,IsAdminUser]
 
     def post(self,request):
         title = request.data.get('title')
