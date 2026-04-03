@@ -7,11 +7,11 @@
 
     <el-table :data="articleList" border>
         <el-table-column prop="id" label="ID" width="80"/>
-        <el-table-column porp="title" label="标题" />
+        <el-table-column prop="title" label="标题" />
         <el-table-column prop="category.name" label="分类" width="120" />
         <el-table-column prop="create_time" label="创建时间" width="180" />
         <el-table-column label="操作" width="180">
-            <template default="{row}">
+            <template #default="{row}">
                 <el-button type="primary" text @click="goEdit(row.id)">编辑</el-button>
                 <el-button type="primary" text @click="handleDelete(row.id)">删除</el-button>
             </template>
@@ -22,7 +22,7 @@
         v-model:current-page="current"
         :page-size="size"
         :total="total"
-        @current-change="loadlist"
+        @current-change="loadList"
         style="margin-top: 20px"
     />
 

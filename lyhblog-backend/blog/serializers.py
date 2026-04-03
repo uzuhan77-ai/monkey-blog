@@ -1,20 +1,18 @@
+from ctypes.wintypes import tagRECT
+
 from rest_framework import serializers
 from .models import Article, Category, Tag, Comment
 
 
-# 1. 新增：分类序列化器
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name']
 
-# 2. 新增：标签序列化器
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields=['id', 'name']
-
-
+        field = ['id', 'name']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -30,8 +28,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         # 这里定义你想传给前端哪些字段
         # 如果你的模型字段名和这里不一样，请核对 models.py
         fields = ['id', 'title', 'summary', 'content', 'create_time', 'tags', 'category']
-
-
 
 
 class CommentSerializer(serializers.ModelSerializer):

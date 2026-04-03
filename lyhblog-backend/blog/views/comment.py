@@ -88,6 +88,19 @@ class CommentAddView(APIView):
 #             "total": total,
 #             "data": serialize.data
 #         })
+
+class CommentAllView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    def get(self,request):
+        comments = Comment.objects.all().order_by('-create_time')
+        serializer = CommentSerializer(comments, many=True)
+        return Response({
+            'code':200,
+            'data':serializer.data
+        })
+
+
+
 #4.后台：删除评论（POST） //仅限管理员
 class CommentDeleteView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]

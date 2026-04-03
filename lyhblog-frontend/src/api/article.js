@@ -12,17 +12,22 @@ export function ApiArticleDetail(id) {
     return request.get('/article/getArticleById/', { params: { id } })
 }
 
-export function ApiArticleAdd(data) {
-    return request.post('/article/add/',data)
+// 新增文章
+export const ApiArticleAdd = (data) => {
+    return request.post('/article/add/', data)
+  }
+// 删除文章
+export const ApiArticleDelete = (id) =>{
+    return request.post('/aritcle/delete/',id)
 }
-
-export function ApiArticleDelete(data) {
-    return request.post('/article/delete/',data)
-}
-
-export function ApiArticleUpdate(data) {
-    return request.post('/article/update/',data)
-}
+// 更新文章
+export const ApiArticleUpdate = (data) => {
+    return request.post('/article/update/', data)
+  }
+// 获取标签列表
+export const ApiTagList = () => {
+    return request.get('/tag/list/')
+  }
 
 export function ApiLogin(data) {
     return request.post('/user/login/',data)
