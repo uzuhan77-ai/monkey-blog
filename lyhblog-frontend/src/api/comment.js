@@ -13,6 +13,12 @@ export const ApiCommentAdd = (data) =>{
     return request.post('/comment/add/', data)
 }
 
+// 
+export const ApiCommentAll = () =>{
+    return request.post('/comment/all/')
+}
+
+
 // 删除评论
 export const ApiCommentDelete = (id) =>{
     return request.post('/comment/delete/', {id})

@@ -12,7 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        field = ['id', 'name']
+        fields = ['id', 'name']
 
 
 class ArticleSerializer(serializers.ModelSerializer):

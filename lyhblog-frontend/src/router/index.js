@@ -37,17 +37,17 @@ const routes = [
             {
                 path: 'article/add',
                 name: 'AdminArticleAdd',
-                conponent: () => import('../views/admin/ArticleEdit.vue')
+                component: () => import('../views/admin/ArticleEdit.vue')
             },
             {
                 path: 'article/edit/:id',
                 name: 'AdminArticleEdit',
-                conponent: () => import('../views/admin/ArticleEdit.vue')
+                component: () => import('../views/admin/ArticleEdit.vue')
             },
             {
                 path: 'comment',
                 name: 'AdminComment',
-                conponent: () => import('../views/admin/CommentList.vue')
+                component: () => import('../views/admin/CommentList.vue')
             }
         ]
     }

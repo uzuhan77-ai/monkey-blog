@@ -10,22 +10,21 @@ urlpatterns = [
     # 访问路径: /api/test/
     path('test/', TestView.as_view(), name= 'test'),
 
+    path('user/login/', LoginView.as_view(), name='login'),
+    path('user/register/', RegisterView.as_view(), name='register'),
+
     path('article/listArticle/', ArticleListView.as_view(), name='article-list'),
     path('article/getArticleById/', ArticleDetailView.as_view(), name= 'article-detail'),
     path('article/add/', ArticleAddView.as_view(), name= 'article-add'),
     path('article/delete/', ArticleDeleteView.as_view(), name=' article-delete'),
     path('article/update/', ArticleUpdateView.as_view(), name=' article-update'),
 
-    path('user/login/', LoginView.as_view(), name='login'),
-    path('user/register/', RegisterView.as_view(), name='register'),
-
-    path('category/listCategory/', CategoryListView.as_view(), name='category-list'),
+    path('tag/list/', TagListView.as_view()),
+    path('category/list/', CategoryListView.as_view()),
 
     path('comment/list/', CommentListView.as_view()),
     path('comment/add/', CommentAddView.as_view()),
-    # path('comment/adminlist/',AdminCommentListView.as_view(), name='admin-comment'),
-    path('comment/admindelete/',CommentDeleteView.as_view()),
-    path('tag/list/',TagListView.as_view()),
+    path('comment/delete/',CommentDeleteView.as_view()),
     path('comment/all/',CommentAllView.as_view())
 
 ]

@@ -18,7 +18,7 @@ export const ApiArticleAdd = (data) => {
   }
 // 删除文章
 export const ApiArticleDelete = (id) =>{
-    return request.post('/aritcle/delete/',id)
+    return request.post('/aritcle/delete/',{id})
 }
 // 更新文章
 export const ApiArticleUpdate = (data) => {
@@ -28,6 +28,10 @@ export const ApiArticleUpdate = (data) => {
 export const ApiTagList = () => {
     return request.get('/tag/list/')
   }
+// 获取分类列表
+export function ApiCategoryList () {
+    return request.get('/category/list/')
+}
 
 export function ApiLogin(data) {
     return request.post('/user/login/',data)
@@ -35,8 +39,4 @@ export function ApiLogin(data) {
 
 export function ApiRegister(data) {
     return request.post('/user/register/',data)
-}
-
-export function ApiCategoryList () {
-    return request.get('/category/listCategory/')
 }
