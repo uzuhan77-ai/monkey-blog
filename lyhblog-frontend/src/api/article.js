@@ -18,7 +18,7 @@ export const ApiArticleAdd = (data) => {
   }
 // 删除文章
 export const ApiArticleDelete = (id) =>{
-    return request.post('/aritcle/delete/',{id})
+    return request.post('/article/delete/',{id})
 }
 // 更新文章
 export const ApiArticleUpdate = (data) => {

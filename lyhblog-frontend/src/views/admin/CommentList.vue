@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="comment-list">
         <el-table :data="commentList" border>
             <el-table-column prop="id" label="ID" width="80px" />
             <el-table-column prop="username" label="用户" width="120" />
@@ -18,26 +18,35 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { ApiCommentDelete } from '../../api/comment'
+import { ApiCommentDelete,ApiCommentAll } from '../../api/comment'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import request from '../../utils/request'
 
 const commentList = ref([])
 
 const loadList = async () => {
-    const res = await request.get('/comment/all/')
-    if (res.data.code == 200) {
-        commentList.value = res.data.data
-    }
+ try{
+    const res = await ApiCommentAll()
+    if(res.data.code == 200){
+    commentList.value = res.data.data
+}
+ }catch(error){
+    ElMessage.error('评论列表加载失败')
+ }
 }
 
 const handleDelete = (id) => {
     ElMessageBox.confirm('确定删除这条评论？', '提示', {
         type: 'warning'
     }).then(async () => {
-        await ApiCommentDelete(id)
-        ElMessage.success('删除成功')
-        loadList()
+        try{
+            const res =await ApiCommentDelete(id)
+            if (res.data.code === 200) {
+            ElMessage.success('删除成功')
+            loadList()
+        }
+    }catch(error){
+        ElMessage.error('删除失败')
+    }
     })
 }
 

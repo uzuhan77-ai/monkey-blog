@@ -20,7 +20,7 @@
             <el-header>
                 <div class="header-right">
                     <span>{{ userStore.userInfo?.username || '管理员' }}</span>
-                    <el-button type="danger" text @click="handleLogout">退出</el-button>
+                    <el-button type="danger" text @click="handleLogout"> 退出</el-button>
                 </div>  
             </el-header>
             

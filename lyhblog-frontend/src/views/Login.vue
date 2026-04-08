@@ -18,11 +18,14 @@
     import { ApiLogin } from '../api/article'
     import { useUserStore } from '../stores/user'
     import { ElMessage } from 'element-plus'
-    const userStore = useUserStore()
+
     const router = useRouter()
     const route = useRoute()
+    const userStore = useUserStore()
+
     const account = ref('')
     const password = ref('')
+    
     const handleLogin =async () => {
         if (!account.value || !password.value) {
             ElMessage.error('账号和密码不能为空')
@@ -36,16 +39,16 @@
             console.log(res.data)
             if (res.data.code === 200) {
                 //保存 token
-                userStore.setToken(res.data.token)
+                userStore.setLoginInfo(res.data)
 
                 ElMessage.success('登录成功')
 
                 // 跳转之前的页面或者，或首页
-                const redirect = route.query.redirect || '/'
+                const redirect = route.query.redirect || (res.data.is_admin ? '/admin/article' : '/')
                 router.push(redirect)
             }
         }catch(error){
-            ElMessage.error('denglushibai')
+            ElMessage.error(error.response?.data?.message || '登录失败')
         }
         
     }

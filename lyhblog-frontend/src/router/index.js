@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useUserStore } from '../stores/user'
 const routes = [
     {
@@ -25,11 +26,11 @@ const routes = [
     {
         path: '/admin',
         component: () => import('../views/admin/Layout.vue'),
-        meta:{ requiresAuth: true }, //标记需要登录
+        meta: { requiresAuth: true, requiresAdmin: true },
         redirect: '/admin/article', 
         children: [
             {
-                path: 'article', //子路由前面不用加/
+                path: 'article', //子路由前面不用加/    
                 name: 'AdminArticle',
                 component: () => import('../views/admin/ArticleList.vue')
 
@@ -64,40 +65,25 @@ const router = createRouter({
 })
 // 路由守卫
 router.beforeEach((to, from , next) =>{
-    // 看访客要去哪里？如果路径是以'/admin' 开头，说明想去后台
-    // if (to.path.startsWith('/admin') ){
+    const userStore = useUserStore()
 
-    //     // 让他把证件掏出来
-    //     const token = localStorage.getItem('user_token')
-    //     const isAdmin = localStorage.getItem('is_admin')
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+    const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)
 
-    //     // 有没有登录？没有登录提到登录
-    //     if(!token){
-    //         alert('请先登录')
-    //         return next('/login')
-    //     }
-    //     // 是不是管理员？
-    //     // 避坑指南：localStorage里存的true会变成字符串'true',所以这里必须和字符串做对比
-    //     if(isAdmin !== 'true'){
-    //         alert('权限不足')
-    //         return next('/')
-
-    //     }
-
-    //     next()
-
-    const useStore = useUserStore()
-
-    // 如果路由需要登录，但用户未登录
-    if (to.meta.requiresAuth && !useStore.isLogin){
+    if(requiresAuth && !userStore.isLogin){
         next({
             path: '/login',
-            query: { redirect: to.fullPath } //记住要去的页面
+            query: {redirect: to.fullPath}
         })
-    }else{
-        // 如果不是取后台bao'an不查证
-        next()
+        return
     }
+    
+    if(requiresAdmin && !userStore.isAdmin){
+        ElMessage.error('没有后台权限')
+        next('/')
+        return
+    }
+    next()
 })
 
 export default router;

@@ -15,7 +15,7 @@ export const ApiCommentAdd = (data) =>{
 
 // 
 export const ApiCommentAll = () =>{
-    return request.post('/comment/all/')
+    return request.get('/comment/all/')
 }
 
 

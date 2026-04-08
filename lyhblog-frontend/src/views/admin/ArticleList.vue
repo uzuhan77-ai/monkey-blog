@@ -59,11 +59,20 @@ const goEdit = (id) =>{
 const handleDelete = (id) =>{
     ElMessageBox.confirm('确定删除这篇文章?', '提示',{
         type: 'warning'
-    }).then(async() =>{
-        // 调用删除接口（下一步实现）
-        ElMessage.success('删除成功')
-        loadList()
     })
+    .then(async() =>{
+        try{
+            const res = await ApiArticleDelete(id)
+
+            if(res.data.code == 200){
+                ElMessage.success('删除成功')
+                await loadList()
+            }
+        }catch(error){
+            ElMessage.error('删除失败')
+        }
+    })
+    .catch(() =>{})
 }
 
 onMounted(() =>{

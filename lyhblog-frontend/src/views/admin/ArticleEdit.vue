@@ -48,6 +48,8 @@
 import {ref, onMounted, computed} from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import {ApiArticleAdd, ApiArticleDetail, ApiArticleUpdate, ApiCategoryList, ApiTagList} from '../../api/article'
+
 
 const route = useRoute()
 const router = useRouter()
@@ -64,9 +66,42 @@ const form = ref({
 const categories = ref([])
 const tags = ref([])
 
-const loadData = async() =>{
-  // 加载分类和标签（需要添加对应接口）
-  // 如果是编辑，加载文章数据
+const loadOptions = async() =>{
+    try{
+        const [categoryRes, tagRes] =await Promise.all([
+            ApiCategoryList(),
+            ApiTagList()
+        ])
+
+        if(categoryRes.data.code ==200){
+            categories.value = categoryRes.data.data
+        }
+        if(tagRes.data.code == 200){
+            tags.value = tagRes.data.data
+        }
+    }catch(error) {
+        ElMessage.error('分类或标签加载失败')
+    }
+}
+
+const loadArticleDetail = async ()=>{
+    if(!isEdit.value) return 
+    try{
+        const res = await ApiArticleDetail(route.params.id)
+        if(res.data.code == 200){
+            const article = res.data.data
+
+            form.value = {
+                title: article.title || '',
+                category_id : article.category?.id || null,
+                tags: article.tags ? article.tags.map((item) =>item.id) : [],
+                summary: article.summary || '',
+                content: article.content || '',
+            }
+        }
+    }catch(error){
+        ElMessage.error('文章详情加载失败')
+    }
 }
 
 const handleSubmit = async() =>{
@@ -74,17 +109,37 @@ const handleSubmit = async() =>{
         ElMessage.warning('标题和内容不能为空')
         return
     }
-      // 调用新增或编辑接口
-      ElMessage.success('保存成功')
-      router.push('/admin/article')
+
+    try{
+        if(isEdit.value){
+            const res = await ApiArticleUpdate({
+                id : route.params.id,
+                ...form.value
+            })
+            if(res.data.code == 200){
+                ElMessage.success('文章修改成功')
+                router.push('/admin/article')
+            }
+        }else{
+            const res = await ApiArticleAdd(form.value)
+
+            if(res.data.code == 200){
+                ElMessage.success('文章新增成功')
+                router.push('/admin/article')
+            }
+        }
+    }catch(error){
+        ElMessage.error(isEdit.value ? '文章修改失败' :'文章新增失败')
+    }
 }
 
 const goBack = () =>{
     router.back()
 }
 
-onMounted(() =>{
-    loadData()
+onMounted(async ()=>{
+    await loadOptions()
+    await loadArticleDetail()
 })
 
 

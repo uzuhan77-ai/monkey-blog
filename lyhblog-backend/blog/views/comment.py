@@ -28,10 +28,7 @@ class CommentListView(APIView):
 
 #2、 发表评论 (POST) - [重点: 必须登录]
 class CommentAddView(APIView):
-    # 👇 重点！加上这行，DRF会自动拦截未登录的请求！
-    # 这就是和咱们 Day 6 前端 Axios 拦截器“双剑合璧”的后端守卫！
     permission_classes = [IsAuthenticated]
-
 
     def  post(self, request):
         article_id = request.data.get('article_id')

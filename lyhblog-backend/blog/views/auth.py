@@ -23,21 +23,21 @@ class LoginView(APIView):
             return Response({"code": 400, "message": "账号和密码不能为空"}, status=400)
 
         user = authenticate(username= account,password= password)
-
-        if user is not None:
-            token, created = Token.objects.get_or_create(user=user)
+        if user is None:
             return Response({
-                "code": 200,
-                "message": "登录成功!",
-                "token": token.key,
-                ## 👇 新增这两行：把身份和名字告诉前端
-                "is_admin": user.is_superuser,
-                "username": user.username,
-            })
+                "code": 400,
+                "message": "账号和密码错误"
+            },status= 400)
 
+        token, _ = Token.objects.get_or_create(user=user)
 
-
-        return Response({"code": 400, "message": "账号或密码错误"}, status=400)
+        return Response({
+            "code": 200,
+            "message": "登录成功",
+            "token": token.key,
+            "username": user.username,
+            "is_admin": user.is_staff,
+        })
 
 
 
