@@ -16,10 +16,16 @@ class ArticleListView(APIView):
         current = int(request.data.get('current',1))
         size = int(request.data.get('size',10))
         category_id = request.data.get('category_id')
+        tag_id = request.data.get('tag_id')
 
         queryset = Article.objects.all()
         if category_id:
             queryset = queryset.filter(category_id =category_id)
+
+        if tag_id:
+            queryset = queryset.filter(tags__id=tag_id)
+
+        queryset = queryset.distinct()
 
         total = queryset.count()
         start = (current-1) * size

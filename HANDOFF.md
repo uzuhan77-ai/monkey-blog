@@ -17,10 +17,11 @@
   - real article deletion in the admin article list
   - admin-only backend access using login response, Pinia store state, and router guards
 - Added `lyhblog-下一步开发-分类与标签管理.md` in the repo root with step-by-step code for category/tag CRUD, admin pages, and route/menu wiring.
+- Added `lyhblog-下一步开发-前台分类标签筛选完善.md` in the repo root with step-by-step code for front-end category/tag article filtering and article detail metadata display.
 
 ## Next Step
 - Guide the user through the new doc in order:
-  1. finish category CRUD
-  2. wire the category admin page and route
-  3. copy the same pattern for tag CRUD
-  4. verify article edit can read the updated category/tag data
+  1. add `tag_id` filtering to the article list backend
+  2. update `Home.vue` to load tags and filter by category/tag
+  3. update `ArticleDetail.vue` to show category, tags, and summary
+  4. verify all article listing/detail flows still work

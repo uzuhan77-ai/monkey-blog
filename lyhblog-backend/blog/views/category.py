@@ -44,7 +44,7 @@ class CategoryAddView(APIView):
 
 
 class CategoryUpdateView(APIView):
-    permission_classer = [IsAuthenticated,IsAdminUser]
+    permission_classes = [IsAuthenticated,IsAdminUser]
 
     def post(self,request):
         category_id = request.data.get('id')

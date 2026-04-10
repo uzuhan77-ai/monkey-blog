@@ -1,10 +1,14 @@
 from django.urls import path
 
 from .views import (TestView, ArticleListView, ArticleDetailView,ArticleAddView, ArticleDeleteView, ArticleUpdateView,
-                    LoginView, RegisterView, CategoryListView,
+                    LoginView, RegisterView
                     )
+from .views.category import CategoryListView, CategoryAddView, CategoryUpdateView, CategoryDeleteView
+
 from .views.comment import CommentListView, CommentAddView,CommentDeleteView,CommentAllView
-from .views.tag import TagListView
+from .views.tag import TagListView, TagAddView, TagUpdateView, TagDeleteView
+
+
 
 urlpatterns = [
     # 访问路径: /api/test/
@@ -19,8 +23,16 @@ urlpatterns = [
     path('article/delete/', ArticleDeleteView.as_view(), name=' article-delete'),
     path('article/update/', ArticleUpdateView.as_view(), name=' article-update'),
 
-    path('tag/list/', TagListView.as_view()),
     path('category/list/', CategoryListView.as_view()),
+    path('category/add/', CategoryAddView.as_view()),
+    path('category/update/', CategoryUpdateView.as_view()),
+    path('category/delete/', CategoryDeleteView.as_view()),
+
+    path('tag/list/', TagListView.as_view()),
+    path('tag/add/', TagAddView.as_view()),
+    path('tag/update/',TagUpdateView.as_view()),
+    path('tag/delete/',TagDeleteView.as_view()),
+
 
     path('comment/list/', CommentListView.as_view()),
     path('comment/add/', CommentAddView.as_view()),

@@ -13,6 +13,12 @@
                 <el-menu-item index="/admin/comment">
                     <span>评论管理</span>
                 </el-menu-item>
+                <el-menu-item index="/admin/category">
+                    <span>分类管理</span>
+                </el-menu-item>
+                <el-menu-item index="/admin/tag">
+                    <span>标签管理</span>
+                </el-menu-item>
             </el-menu>
         </el-aside>
 

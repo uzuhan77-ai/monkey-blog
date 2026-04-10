@@ -1,29 +1,65 @@
 <template>
-    <div>
+    <div class="home-page">
       <h1>文章列表</h1>
   
       <!-- 分类筛选 -->
-      <div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:20px;">
-        <span style="margin-right: 10px;">分类筛选</span>
-  
-        <el-button 
-          :type="activeCategoryId === null ? 'primary' : 'default'"
-          size="small"
-          @click="handleCategoryClick(null)"
-        >全部</el-button>
-  
-        <el-button 
-          v-for="cat in categoryList"
-          :key="cat.id"
-          :type="activeCategoryId === cat.id ? 'primary' : 'default'"
-          size="small"
-          @click="handleCategoryClick(cat.id)"
-          style="margin-right: 10px;"
-        >
-          {{ cat.name }}
-        </el-button>
+      <div class="filter-panel">
+
+        <div class="filter-row">
+          <span class="filte-title">快速筛选:</span>
+    
+          <el-button 
+            :type="activeCategoryId === null && activeTagId ===null ? 'primary' : 'default'"
+            size="small"
+            @click="handleAllClick"
+          >
+            全部文章
+          </el-button>
+        </div> 
+
+        <div class="filter-row">
+          <span class="filter-title">分类:</span>
+          
+          <el-button 
+            :type="activeCategoryId ===null ? 'primary' : 'default'"
+            size="small"
+            @click="handleCategoryClick(null)"
+          >
+            全部分类
+          </el-button>
+
+          <el-button
+            v-for="cat in categoryList"
+            :key="cat.id"
+            :type="activeCategoryId === cat.id ? 'primary' : 'default'"
+            size="small"
+            @click="handleCategoryClick(cat.id)"
+          >
+            {{ cat.name }}
+          </el-button>
+        </div>
+
+        <div class="filter-row">
+          <span class="filter-title">标签:</span>
+          <el-button
+            :type="activeTagId === null ? 'primary' : 'default'"
+            :size="small"
+            @click="handleTagClick(null)"
+          >
+            全部标签
+          </el-button>
+
+          <el-button
+            v-for="tag in tagList"
+            :key="tag.id"
+            :type="activeTagId === tag.id ? 'primary' : 'default'"
+            size="small"
+            @click="handleTagClick(tag.id)"
+          >
+            {{ tag.name }}
+          </el-button>
+        </div>
       </div>
-  
       <el-skeleton v-if="loading" :rows="5" animated/>
       <!-- 文章列表 -->
       <el-row :gutter="20">
@@ -101,6 +137,7 @@
   import { ref, onMounted } from 'vue'
   import { ApiArticleList, ApiCategoryList } from '../api/article'
   import { useRouter } from 'vue-router'
+  import {ElMessage} from 'element-plus'
   
   const loading = ref(false)
   const router = useRouter()

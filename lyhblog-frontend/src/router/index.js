@@ -49,6 +49,16 @@ const routes = [
                 path: 'comment',
                 name: 'AdminComment',
                 component: () => import('../views/admin/CommentList.vue')
+            },
+            {
+                path: 'category',
+                name: 'AdminCategory',
+                component: () => import('../views/admin/CategoryList.vue')
+            },
+            {
+                path: 'tag',
+                name: 'AdminTag',
+                component: () => import('../views/admin/TagList.vue')
             }
         ]
     }

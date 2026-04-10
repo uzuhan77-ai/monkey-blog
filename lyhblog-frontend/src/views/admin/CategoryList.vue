@@ -18,7 +18,7 @@
             <el-table-column label="操作" width="180">
                 <template #default="{row}">
                     <el-button type="primary" text @click="handleEdit(row)">编辑</el-button>
-                    <el-button type="danger" text @click="handleEdit(row.id)">删除</el-button>
+                    <el-button type="danger" text @click="handleDelete(row.id)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -31,8 +31,8 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {
     ApiCategoryList,
     ApiCategoryAdd,
-    APicategoryUpdate,
-    ApicategoryDelete
+    ApiCategoryUpdate,
+    ApiCategoryDelete
 } from '../../api/category'
 
 const categoryList = ref([])
@@ -59,11 +59,58 @@ const resetForm = () =>{
 }
 const handleEdit = (row) =>{
     form.value={
-        id:row.id
+        id:row.id,
         name:row.name
     }
 }
-
+const handleSubmit = async () =>{
+    if(!form.value.name.trim()){
+        ElMessage.warning('分类名称不能为空')
+        return
+    }
+    try{
+        const res = form.value.id
+        ? await ApiCategoryUpdate(form.value)
+        : await ApiCategoryAdd(form.value)
+        
+        if(res.data.code == 200){
+            ElMessage.success(form.value.id ? '分类修改成功' : '分类新增成功')
+            resetForm()
+            loadList()
+        }
+    }catch(error){
+        ElMessage.error(error.response?.data?.message || '操作失败')
+    }
+}
+const handleDelete = (id) =>{
+    ElMessageBox.confirm('确定删除这个分类?', '提示', {
+        type:'warning'
+    })
+    .then(async() =>{
+        try{
+            const res = await ApiCategoryDelete(id)
+            if(res.data.code == 200){
+                ElMessage.success('分类删除成功')
+                loadList()
+            }
+        }catch(error){
+            ElMessage.error(error.response?.data?.message || '删除失败')
+        }
+    })
+    .catch(() =>{})
+}
+onMounted(() =>{
+    loadList()
+})
 
 
 </script>
+<style scoped>
+.toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+
+</style>
