@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import Article, Category # 注意这里变成了相对导入 '..'
 from ..serializers import ArticleSerializer, CategorySerializer # 注意这里变成了相对导入 '..'
-
+from django.db.models import Q
 
 
 
@@ -17,6 +17,7 @@ class ArticleListView(APIView):
         size = int(request.data.get('size',10))
         category_id = request.data.get('category_id')
         tag_id = request.data.get('tag_id')
+        keyword = (request.data.get('keyword') or '').strip()
 
         queryset = Article.objects.all()
         if category_id:
@@ -24,6 +25,13 @@ class ArticleListView(APIView):
 
         if tag_id:
             queryset = queryset.filter(tags__id=tag_id)
+
+        if keyword:
+            queryset = queryset.filter(
+                Q(title__icontains=keyword) |
+                Q(summary__icontains=keyword) |
+                Q(conteng__icontains=keyword)
+            )
 
         queryset = queryset.distinct()
 

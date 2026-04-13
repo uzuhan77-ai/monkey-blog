@@ -30,7 +30,7 @@
 <script setup>
 import {ref,onMounted} from 'vue'
 import {useRouter} from 'vue-router'
-import {ApiArticleList} from '../../api/article'
+import {ApiArticleDelete, ApiArticleList} from '../../api/article'
 import {ElMessage, ElMessageBox} from 'element-plus'
 
 const router= useRouter()

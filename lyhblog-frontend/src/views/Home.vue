@@ -4,6 +4,21 @@
 
     <div class="filter-panel">
       <div class="filter-row">
+        <span class="filter-title">搜索:</span>
+        <el-input 
+          v-model="keyword"
+          class="search-input"
+          clearable
+          placeholder="输入标题或内容关键词"
+          @keyup.enter="handleSearch"
+        />
+        <el-button type="primary" @click="handleSearch">
+          搜索
+        </el-button>
+      </div>
+
+
+      <div class="filter-row">
         <span class="filter-title">快速筛选:</span>
         <el-button 
           :type="activeCategoryId === null && activeTagId ===null ? 'primary' : 'default'"
@@ -138,7 +153,7 @@ const categoryList = ref([])
 const tagList = ref([])
 const activeCategoryId = ref(null)
 const activeTagId = ref(null)
-
+const keyword = ref('')
 const getArticleList = async () => {
   loading.value = true
   try {
@@ -146,7 +161,8 @@ const getArticleList = async () => {
       current: current.value,
       size: size.value,
       category_id: activeCategoryId.value,
-      tag_id: activeTagId.value
+      tag_id: activeTagId.value,
+      keyword: keyword.value.trim()
 
     })
     if (res.data.code == 200) {
@@ -184,6 +200,7 @@ const getTagList = async () =>{
 const handleAllClick = () =>{
   activeCategoryId.value = null
   activeTagId.value = null
+  keyword.value = ''
   current.value = 1
   getArticleList()
 }
@@ -196,6 +213,11 @@ const handleCategoryClick = (categoryId) => {
 
 const handleTagClick = (tagId) =>{
   activeTagId.value = tagId
+  current.value = 1
+  getArticleList()
+}
+
+const handleSearch = () =>{
   current.value = 1
   getArticleList()
 }
@@ -255,6 +277,10 @@ onMounted(() => {
   color: #303133;
 }
 
+.search-input {
+  width: 280px;
+}
+
 .article-card {
   cursor: pointer;
   transition: all 0.3s;
@@ -283,10 +309,6 @@ onMounted(() => {
 .category-name {
   color: #409eff;
   font-weight: bold;
-}
-
-.empty-text {
-  color: #999;
 }
 
 .tag-list {
