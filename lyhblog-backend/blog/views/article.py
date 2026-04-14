@@ -30,7 +30,7 @@ class ArticleListView(APIView):
             queryset = queryset.filter(
                 Q(title__icontains=keyword) |
                 Q(summary__icontains=keyword) |
-                Q(conteng__icontains=keyword)
+                Q(content__icontains=keyword)
             )
 
         queryset = queryset.distinct()

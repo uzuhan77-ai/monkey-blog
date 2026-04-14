@@ -14,8 +14,8 @@ export const ApiCommentAdd = (data) =>{
 }
 
 // 
-export const ApiCommentAll = () =>{
-    return request.get('/comment/all/')
+export const ApiCommentAll = (params) =>{
+    return request.get('/comment/all/',{params})
 }
 
 

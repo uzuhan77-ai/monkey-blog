@@ -13,6 +13,17 @@
                 </template>
             </el-table-column>
         </el-table>
+        
+        <div class="pagination-box">
+            <el-pagination
+                background
+                layout="total,prev,pager,next"
+                :total="total"
+                :page-size="size"
+                v-model:current-page="current"
+                @current-change="loadList"
+            />
+        </div>
     </div>
 </template>
 
@@ -22,12 +33,19 @@ import { ApiCommentDelete,ApiCommentAll } from '../../api/comment'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const commentList = ref([])
+const current = ref(1)
+const size = ref(10)
+const total = ref(0)
 
 const loadList = async () => {
  try{
-    const res = await ApiCommentAll()
+    const res = await ApiCommentAll({
+        current:current.value,
+        size:size.value
+    })
     if(res.data.code == 200){
     commentList.value = res.data.data
+    total.value = res.data.total
 }
  }catch(error){
     ElMessage.error('评论列表加载失败')
@@ -42,6 +60,13 @@ const handleDelete = (id) => {
             const res =await ApiCommentDelete(id)
             if (res.data.code === 200) {
             ElMessage.success('删除成功')
+            
+            const isLastItemOnPage = commentList.value.length === 1
+            if(isLastItemOnPage && current.value >1 ){
+                current.value -=1
+            }
+
+
             loadList()
         }
     }catch(error){
@@ -54,3 +79,11 @@ onMounted(() => {
     loadList()
 })
 </script>
+
+<style>
+.pagination-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+</style>

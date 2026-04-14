@@ -89,11 +89,28 @@ class CommentAddView(APIView):
 class CommentAllView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self,request):
-        comments = Comment.objects.all().order_by('-create_time')
-        serializer = CommentSerializer(comments, many=True)
+        try:
+            current = max(int(request.GET.get('current',1)),1)
+            size = max(int(request.GET.get('size',10)),1)
+        except(TypeError, ValueError):
+            return Response({
+                "code":400,
+                "message":'分页参数错误'
+            },status=400)
+
+        queryset = Comment.objects.all().order_by('-create_time')
+        total = queryset.count()
+        start = (current-1)*size
+        end = start +size
+
+        comments = queryset[start:end]
+        serializer = CommentSerializer(comments,many=True)
         return Response({
-            'code':200,
-            'data':serializer.data
+            "code":200,
+            "data":serializer.data,
+            "total":total,
+            "current":current,
+            "size":size,
         })
 
 
