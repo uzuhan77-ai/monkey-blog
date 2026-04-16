@@ -1,6 +1,6 @@
 <template>
     <header class="front-header">
-        <div class="front-inner">
+        <div class="header-inner">
             <router-link to="/" class="brand">
                 <span class="brand-mark">LYH</span>
                 <div class="brand-text">
@@ -17,7 +17,7 @@
                     class="nav-link"
                     :class="{active:isActive(item.path)}"
                 >
-                {{ item.label }}
+                    {{ item.label }}
             </router-link>
             </nav>
 
@@ -32,12 +32,14 @@
 <script setup>
 import {useRoute} from 'vue-router'
 
+const route = useRoute()
+
 const navItems = [
     {path: '/', label: '首页'},
     {path: '/project', label:'项目'},
     {path:'/about', label:'关于'}
 ]
-const isActive = (path) => route.parh === path
+const isActive = (path) => route.path === path
 
 </script>
 

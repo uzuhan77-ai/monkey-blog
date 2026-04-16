@@ -403,7 +403,7 @@ export default router
     <section class="hero-section">
       <div class="hero-content">
         <p class="hero-label">PERSONAL PROJECT / CONTENT SYSTEM</p>
-        <h1>把 blog 做成能展示的项目，而不只是文章列表</h1>
+        <h1>把 blog 做成能展示的项目</h1>
         <p class="hero-desc">
           lyhblog 是一个基于 Django REST Framework + Vue3 的前后端分离内容管理系统，
           当前已经完成文章列表、文章详情、分类标签筛选、登录注册、评论和后台基础管理。
