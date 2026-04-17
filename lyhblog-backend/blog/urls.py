@@ -7,7 +7,7 @@ from .views.category import CategoryListView, CategoryAddView, CategoryUpdateVie
 
 from .views.comment import CommentListView, CommentAddView,CommentDeleteView,CommentAllView
 from .views.tag import TagListView, TagAddView, TagUpdateView, TagDeleteView
-
+from .views.ai import AIWritingAssistantView
 
 
 urlpatterns = [
@@ -37,6 +37,8 @@ urlpatterns = [
     path('comment/list/', CommentListView.as_view()),
     path('comment/add/', CommentAddView.as_view()),
     path('comment/delete/',CommentDeleteView.as_view()),
-    path('comment/all/',CommentAllView.as_view())
+    path('comment/all/',CommentAllView.as_view()),
+
+    path('ai/writing-assistant/',AIWritingAssistantView.as_view())
 
 ]

@@ -1,6 +1,11 @@
 <template>
     <div class="article-edit">
-        <h2>{{ isEdit ? '编辑文章' : '新增文章' }}</h2>
+        <div class="page-header">
+            <h2>{{ isEdit ? '编辑文章' : '新增文章' }}</h2>
+            <el-button type="primary" plain @click="aiDrawerVisable=true">
+                AI 助手
+            </el-button>
+        </div>
 
         <el-form :model="form" label-width="80px">
             <el-form-item label="标题">
@@ -30,7 +35,7 @@
             </el-form-item>
 
             <el-form-item label="摘要">
-                <el-input v-model="form.summary" type="textarea" :rows="3" />
+                <el-input v-model="form.summary" type="textarea" :rows="4" />
             </el-form-item>
 
             <el-form-item label="内容">
@@ -42,6 +47,12 @@
                 <el-button @click="goBack">取消</el-button>
             </el-form-item>
         </el-form>
+
+        <AIAssistantDrawer
+            v-model="aiDrawerVisable"
+            :article-form="form"
+            @apply="handleApplyAiResult"
+        />
     </div>
 </template>
 <script setup>
@@ -49,12 +60,14 @@ import {ref, onMounted, computed} from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import {ApiArticleAdd, ApiArticleDetail, ApiArticleUpdate, ApiCategoryList, ApiTagList} from '../../api/article'
+import AIAssistantDrawer from '../../components/admin/AIAssistantDrawer.vue';
 
 
 const route = useRoute()
 const router = useRouter()
 
 const isEdit = computed(() => !!route.params.id)
+const aiDrawerVisable = ref(false)
 
 const form = ref({
     title:'',
@@ -102,6 +115,26 @@ const loadArticleDetail = async ()=>{
     }catch(error){
         ElMessage.error('文章详情加载失败')
     }
+}
+
+const handleApplyAiResult =(payload) =>{
+    if (typeof payload.title === "string") {
+    form.value.title = payload.title;
+  }
+  if (typeof payload.summary === "string") {
+    form.value.summary = payload.summary;
+  }
+  if (payload.category_id !== undefined && payload.category_id !== null) {
+    form.value.category_id = payload.category_id;
+  }
+  if (Array.isArray(payload.matched_tag_ids) && payload.matched_tag_ids.length) {
+    form.value.tags = [...new Set(payload.matched_tag_ids)];
+  }
+  if (typeof payload.content === "string" && payload.content.trim()) {
+    form.value.content = payload.content;
+  }
+
+  ElMessage.success("AI 建议已应用到表单");
 }
 
 const handleSubmit = async() =>{
