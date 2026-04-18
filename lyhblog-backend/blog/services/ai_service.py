@@ -28,13 +28,13 @@ def _build_system_prompt(categories: list[dict[str, Any]], tags: list[dict[str, 
     tag_names = ", ".join(item["name"] for item in tags) or "None"
 
     return (
-        "浣犳槸涓枃鎶€鏈崥瀹㈠悗鍙扮殑 AI 鍐欎綔鍔╂墜銆?
-        "璇峰洿缁?Django + Vue 鎶€鏈崥瀹㈠満鏅紝鐢熸垚瀹炵敤銆佸彲鍙戝竷鐨勬枃绔犲缓璁€?
-        "浼樺厛缁撳悎鐜版湁鍒嗙被鍜屾爣绛俱€?
-        "浣犲繀椤诲彧杩斿洖涓ユ牸 JSON锛屼笉瑕佽繑鍥?Markdown 浠ｇ爜鍧楋紝涓嶈鍔犻澶栬В閲娿€俓n\n"
-        f"鐜版湁鍒嗙被锛歿category_names}\n"
-        f"鐜版湁鏍囩锛歿tag_names}\n\n"
-        "杩斿洖 JSON 缁撴瀯锛?
+        "你是中文技术博客后台的 AI 写作助手。"
+        "请围绕 Django + Vue 技术博客场景，生成实用、可发布的文章建议。"
+        "优先结合现有分类和标签。"
+        "你必须只返回严格 JSON，不要返回 Markdown 代码块，不要添加额外解释。\n\n"
+        f"现有分类：{category_names}\n"
+        f"现有标签：{tag_names}\n\n"
+        "返回 JSON 结构："
         "{"
         '"title": string, '
         '"summary": string, '
@@ -43,13 +43,13 @@ def _build_system_prompt(categories: list[dict[str, Any]], tags: list[dict[str, 
         '"outline": string[], '
         '"draft_markdown": string'
         "}\n\n"
-        "瑕佹眰锛?
-        "1. 鍏ㄩ儴鍐呭鐢ㄤ腑鏂囷紱"
-        "2. title 瑕佸叿浣擄紱"
-        "3. summary 鍐?2-3 鍙ワ紱"
-        "4. tag_names 鏈€澶?5 涓紱"
-        "5. outline 杩斿洖 4-6 鏉★紱"
-        "6. draft_markdown 杩斿洖涓€涓€傚悎缁х画缂栬緫鐨?Markdown 鑽夌楠ㄦ灦銆?
+        "要求："
+        "1. 全部内容使用中文；"
+        "2. title 要具体；"
+        "3. summary 写 2-3 句；"
+        "4. tag_names 最多 5 个；"
+        "5. outline 返回 4-6 条；"
+        "6. draft_markdown 返回一个适合继续编辑的 Markdown 草稿框架。"
     )
 
 
@@ -58,16 +58,16 @@ def _build_user_prompt(payload: dict[str, Any]) -> str:
     audience = payload.get("audience", "")
     tone = payload.get("tone", "")
     keywords = payload.get("keywords", [])
-    keyword_text = ", ".join(keywords) if keywords else "None"
+    keyword_text = ", ".join(keywords) if keywords else "无"
 
     return (
-        f"涓婚: {topic or 'None'}\n"
-        f"璇昏€? {audience or '閫氱敤鎶€鏈鑰?}\n"
-        f"椋庢牸: {tone or '瀹炴垬鍨?}\n"
-        f"鍏抽敭璇? {keyword_text}\n"
-        f"褰撳墠鏍囬: {_trim_text(payload.get('current_title', ''), 200) or 'None'}\n"
-        f"褰撳墠鎽樿: {_trim_text(payload.get('current_summary', ''), 600) or 'None'}\n"
-        f"褰撳墠姝ｆ枃鐗囨: {_trim_text(payload.get('current_content', ''), 2000) or 'None'}"
+        f"主题: {topic or '无'}\n"
+        f"读者: {audience or '通用技术读者'}\n"
+        f"风格: {tone or '实战型'}\n"
+        f"关键词: {keyword_text}\n"
+        f"当前标题: {_trim_text(payload.get('current_title', ''), 200) or '无'}\n"
+        f"当前摘要: {_trim_text(payload.get('current_summary', ''), 600) or '无'}\n"
+        f"当前正文片段: {_trim_text(payload.get('current_content', ''), 2000) or '无'}"
     )
 
 
