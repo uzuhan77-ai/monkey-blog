@@ -2,11 +2,8 @@
     <header class="front-header">
         <div class="header-inner">
             <router-link to="/" class="brand">
-                <span class="brand-mark">⌂LYH</span>
-                <div class="brand-text">
-                    <strong>lyhblog</strong>
-                    <span>Django+ three.js</span>
-                </div>
+                <span class="brand-mark">⌂</span>
+                <strong>LYH Blog</strong>
             </router-link>
 
             <nav class="nav-list">
@@ -45,12 +42,12 @@ const isActive = (path) => route.path === path
 
 <style scoped>
 .front-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    backdrop-filter: blur(18px);
-    background: rgba(250, 248, 243, 0.78);
-    border-bottom: 1px solid rgba(31, 33, 29, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid rgba(47, 141, 244, 0.08);
 }
 
 .header-inner {
@@ -66,42 +63,26 @@ const isActive = (path) => route.path === path
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-decoration: none;
-  color: #17211b;
+  color: #2f8df4;
 }
 
 .brand-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: rgba(59, 130, 246, 0.12);
-    color: #2f8df4;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    letter-spacing: 0;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2f8df4;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
 }
 
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.brand-text strong {
+.brand strong {
   font-size: 16px;
-}
-
-.brand-text span {
-  font-size: 12px;
-  color: #5d6b63;
-}
-
-.brand-text strong {
-    font-size: 16px;
-    color: #2f8df4;
+  color: #2f8df4;
 }
 
 .nav-list {
@@ -120,8 +101,8 @@ const isActive = (path) => route.path === path
 
 .nav-link:hover,
 .nav-link.active {
-  background: #1f4d3b;
-  color: #fff;
+  background: rgba(47, 141, 244, 0.12);
+  color: #2f8df4;
 }
 
 .nav-actions {
@@ -137,14 +118,14 @@ const isActive = (path) => route.path === path
 }
 
 .ghost-link {
-  color: #1f4d3b;
+  color: #2f8df4;
 }
 
 .solid-link {
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: #2f8df4;
-    color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #2f8df4;
+  color: #fff;
 }
 
 @media (max-width: 860px) {
@@ -153,10 +134,10 @@ const isActive = (path) => route.path === path
     align-items: stretch;
   }
 
-  .nav-link:hover,
-  .nav-link.active {
-    background: rgba(59, 130, 246, 0.12);
-    color: #2f8df4;
+  .brand,
+  .nav-list,
+  .nav-actions {
+    justify-content: center;
   }
 }
 

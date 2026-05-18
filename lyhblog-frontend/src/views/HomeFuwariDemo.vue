@@ -11,22 +11,24 @@
 
                 <!--个人信息卡-->
                 <section class="profile-card glass-card">
-                    <div>头像占位</div>
-                    <h1>博客名</h1>
-                    <p>简洁占位</p>
+                  <div class="avatar">LYH</div>
 
+                  <h1>LYH BLOG</h1>
+
+                  <p> 记录AI编程和项目实践.</p>
                 </section>
 
                 <!--分类-->
                 <section class="glass-card widget-card">
                     <h2>分类</h2>
                     <button class="chip"
-                        v-for="cat in categoryList"
-                        :key="cat.id"
-                    >
-                    {{ cat.name }}
-                </button>
-                    <button>分类占位</button>
+                            v-for="cat in categoryList"
+                            :key="cat.id"
+                            :class="{active:categoryId == cat.id}"
+                            @click="handleCategoryClick(cat.id)"
+                        >
+                        {{ cat.name }}
+                    </button>
                 </section>
 
                 <!--标签-->
@@ -35,9 +37,11 @@
                     <button class="chip"
                         v-for="label in labelList"
                         :key="label.id"
+                        :class="{active:tagId == label.id}"
+                        @click="handleTagClick(label.id)"
                     >
                     {{ label.name }}
-                </button>
+                  </button>
                 </section>
 
             </aside>
@@ -46,28 +50,45 @@
             <section class="content">
 
                 <!--搜索栏-->
-                <div>
+                <div class="content-head">
                     <h2>最新文章</h2>
-                    <input placeholder="搜索文章" />
-                    <button>搜索</button>
                 </div>
 
                 <!--文章列表-->
-                <div>
+                <div class="post-list">
                     <article
                         v-for="item in articleList"
                         :key="item.id"
-                        @click="goToDetail(item.id)"    
+                        class="post-card glass-card"
+                        @click="goToDetail(item.id)"
                     >
-                        <span>{{ item.create_time }}</span>
-                        <span>{{item.category?.name|| '未分类'}}</span>
+                        <div class="post-meta">
+                            <span>{{ item.create_time }}</span>
+                            <span>{{item.category?.name|| '未分类'}}</span>
+                            <span v-if="item.tags && item.tags.length">
+                              {{item.tags[0].name}}
+                            </span>
+                            <span v-else>无标签</span>
+                        </div>
                         <h3>{{ item.title }}</h3>
                         <p>{{item.summary || '暂无摘要'}}</p>
+                        <div class="post-extra">
+                          <span>阅读全文</span>
+                        </div>
                     </article>
                 </div>
 
                 <!--分页-->
-                <div>分页占位</div>
+                <div class="pagination-box">
+                  <el-pagination
+                    background
+                    layout="prev,pager,next"
+                    :total="total"
+                    :page-size="size"
+                    :current-page="current"
+                    @current-change="handlePageChange"
+                  />
+                </div>
 
             </section>
 
@@ -139,6 +160,30 @@ const getArticleList = async () =>{
     }
 }
 
+const handleSearch = () =>{
+  current.value =1
+  getArticleList()
+}
+
+const handleCategoryClick = (id) =>{
+  categoryId.value = id
+  tagId.value = null 
+  current.value = 1
+  getArticleList()
+}
+
+const handleTagClick = (id) =>{
+  tagId.value = id
+  categoryId.value = null 
+  current.value = 1
+  getArticleList()
+}
+
+const handlePageChange =(page) =>{
+  current.value = page
+  getArticleList()
+}
+
 
 onMounted(()=>{
     getCategoryList() //页面挂载完成后自动执行
@@ -151,11 +196,11 @@ onMounted(()=>{
 
 <style scoped>
 .home-page {
-    min-height: 100vh;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22)),
-      #f4f1ea;
-    color: #1f211d;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(246, 250, 255, 0.42)),
+    #f6f8fb;
+  color: #1f2430;
 }
 
 .home-shell {
@@ -168,85 +213,98 @@ onMounted(()=>{
 }
 
 .glass-card {
-  border: 1px solid rgba(31, 31, 27, 0.08);
-  background: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 20px 60px rgba(31, 31, 27, 0.06);
+  border: 1px solid rgba(31, 36, 48, 0.06);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.035);
   backdrop-filter: blur(16px);
-  border-radius: 24px;
+  border-radius: 16px;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  align-self: start;
+  position: sticky;
+  top: 96px;
 }
 
 .profile-card {
-  padding: 24px;
+  padding: 26px 24px;
 }
 
 .avatar {
   width: 72px;
   height: 72px;
-  border-radius: 20px;
+  border-radius: 18px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #1f4d3b, #9bb089);
-  color: #fff;
+  background: rgba(47, 141, 244, 0.12);
+  color: #2f8df4;
   font-weight: 800;
+  box-shadow: 0 12px 24px rgba(47, 141, 244, 0.12);
 }
 
-.stats {
-  margin-top: 22px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.profile-card h1 {
+  margin: 24px 0 0;
+  color: rgba(31, 36, 48, 0.92);
+  font-size: 30px;
+  line-height: 1.16;
+  letter-spacing: 0.02em;
 }
 
-.stats div {
-  padding: 12px 8px;
-  border-radius: 16px;
-  background: rgba(111, 127, 106, 0.1);
-  text-align: center;
-}
-
-.stats strong {
-  display: block;
-  font-size: 22px;
-  color: #1f4d3b;
-}
-
-.stats span {
-  display: block;
-  margin-top: 4px;
-  font-size: 12px;
-  color: #6c746c;
+.profile-card p {
+  margin: 20px 0 0;
+  color: rgba(31, 36, 48, 0.66);
+  line-height: 1.75;
 }
 
 .widget-card {
-  padding: 20px;
+  padding: 22px 20px 18px;
 }
 
 .widget-card h2 {
-  margin: 0 0 14px;
+  position: relative;
+  margin: 0 0 16px;
+  padding-left: 12px;
   font-size: 18px;
+  line-height: 1.3;
+  color: rgba(31, 36, 48, 0.9);
+}
+
+.widget-card h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.22em;
+  width: 4px;
+  height: 1em;
+  border-radius: 999px;
+  background: #2f8df4;
 }
 
 .chip {
-  margin: 0 8px 8px 0;
-  padding: 7px 12px;
+  margin: 0 8px 10px 0;
+  padding: 7px 11px;
   border: 0;
-  border-radius: 999px;
-  background: rgba(111, 127, 106, 0.1);
-  color: #526157;
+  border-radius: 10px;
+  background: rgba(47, 141, 244, 0.08);
+  color: rgba(47, 111, 171, 0.92);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .chip:hover,
 .chip.active {
-  background: #1f4d3b;
-  color: #fff;
+  background: rgba(47, 141, 244, 0.14);
+  color: #2f8df4;
+  transform: translateY(-1px);
+}
+
+.widget-card > button:not(.chip) {
+  display: none;
 }
 
 .content-head {
@@ -259,36 +317,126 @@ onMounted(()=>{
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+}
+
+.state-card {
+  padding: 28px;
 }
 
 .post-card {
-  padding: 24px;
+  position: relative;
+  padding: 26px 78px 24px 28px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.post-card.glass-card {
+  border-color: rgba(31, 36, 48, 0.06);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.035);
+  border-radius: 16px;
+}
+
+.post-card::after {
+  content: "›";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  bottom: 14px;
+  width: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(47, 141, 244, 0.08);
+  color: #2f8df4;
+  font-size: 36px;
+  line-height: 1;
+  opacity: 0.82;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 70px rgba(31, 31, 27, 0.1);
+  transform: translateY(-2px);
+  border-color: rgba(47, 141, 244, 0.18);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.post-card:hover::after {
+  opacity: 1;
+  background: rgba(47, 141, 244, 0.14);
+  transform: translateX(2px);
 }
 
 .post-meta {
-  color: #777d73;
+  color: rgba(31, 36, 48, 0.5);
   font-size: 13px;
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.post-meta span {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(31, 36, 48, 0.5);
+  font-weight: 500;
+}
+
+.post-meta span + span::before {
+  content: "/";
+  margin-right: 10px;
+  color: rgba(31, 36, 48, 0.22);
+}
+
+.post-meta span:first-child {
+  color: rgba(31, 36, 48, 0.42);
 }
 
 .post-card h3 {
-  margin: 14px 0 10px;
-  font-size: 24px;
-  color: #1d241f;
+  position: relative;
+  margin: 16px 0 12px;
+  padding-left: 16px;
+  font-size: 26px;
+  line-height: 1.38;
+  color: rgba(31, 36, 48, 0.92);
+  transition: color 0.2s ease;
+}
+
+.post-card h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.32em;
+  width: 4px;
+  height: 1.05em;
+  border-radius: 999px;
+  background: #2f8df4;
+}
+
+.post-card:hover h3 {
+  color: #2f8df4;
 }
 
 .post-card p {
-  color: #62675f;
-  line-height: 1.8;
+  margin: 0;
+  color: rgba(31, 36, 48, 0.66);
+  line-height: 1.85;
+}
+
+.post-extra {
+  margin-top: 18px;
+  color: rgba(31, 36, 48, 0.38);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.post-extra span::after {
+  content: " →";
+  color: #2f8df4;
+  font-weight: 700;
 }
 
 .pagination-box {
