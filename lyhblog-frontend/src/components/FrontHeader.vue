@@ -2,7 +2,7 @@
     <header class="front-header">
         <div class="header-inner">
             <router-link to="/" class="brand">
-                <span class="brand-mark">LYH</span>
+                <span class="brand-mark">⌂LYH</span>
                 <div class="brand-text">
                     <strong>lyhblog</strong>
                     <span>Django+ three.js</span>
@@ -45,12 +45,12 @@ const isActive = (path) => route.path === path
 
 <style scoped>
 .front-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  backdrop-filter: blur(12px);
-  background: rgba(247, 245, 240, 0.88);
-  border-bottom: 1px solid rgba(25, 40, 34, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(18px);
+    background: rgba(250, 248, 243, 0.78);
+    border-bottom: 1px solid rgba(31, 33, 29, 0.06);
 }
 
 .header-inner {
@@ -72,16 +72,16 @@ const isActive = (path) => route.path === path
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #1f4d3b, #9bb089);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  letter-spacing: 1px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.12);
+    color: #2f8df4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    letter-spacing: 0;
 }
 
 .brand-text {
@@ -97,6 +97,11 @@ const isActive = (path) => route.path === path
 .brand-text span {
   font-size: 12px;
   color: #5d6b63;
+}
+
+.brand-text strong {
+    font-size: 16px;
+    color: #2f8df4;
 }
 
 .nav-list {
@@ -136,10 +141,10 @@ const isActive = (path) => route.path === path
 }
 
 .solid-link {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #1f4d3b;
-  color: #fff;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: #2f8df4;
+    color: #fff;
 }
 
 @media (max-width: 860px) {
@@ -148,10 +153,10 @@ const isActive = (path) => route.path === path
     align-items: stretch;
   }
 
-  .nav-list,
-  .nav-actions {
-    justify-content: center;
-    flex-wrap: wrap;
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(59, 130, 246, 0.12);
+    color: #2f8df4;
   }
 }
 

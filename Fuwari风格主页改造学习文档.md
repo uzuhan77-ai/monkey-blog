@@ -913,3 +913,437 @@ src/views/Home.vue
 布局由 Vue 控制
 视觉向 Fuwari 靠
 ```
+
+## 13. 从你当前进度继续手写
+
+这一节按你的当前 `HomeFuwariDemo.vue` 来学，不要求一次性复制整页代码。每次只改一小块，写完就刷新页面看结果。
+
+你现在已经完成了这些事情：
+
+```text
+1. 页面有 FrontHeader
+2. 页面分成左侧 sidebar 和右侧 content
+3. 已经能请求分类、标签、文章列表
+4. 文章卡片已经能点击跳转到 /article?id=xxx
+5. 已经写了一批 Fuwari 风格 CSS
+```
+
+现在的问题不是“没有代码”，而是“模板还没有用上样式和交互”。所以接下来不要急着重写整页，要按下面顺序补。
+
+### 第一步：先让已有 CSS 生效
+
+你现在 CSS 里已经写了：
+
+```css
+.glass-card {}
+.widget-card {}
+.chip {}
+.content-head {}
+.post-list {}
+.post-card {}
+.post-meta {}
+.pagination-box {}
+```
+
+但是模板里很多地方还没有加这些 class，所以样式看不到。第一步只改 `<template>`，不要动 `<script>`。
+
+把个人信息卡：
+
+```vue
+<section class="profile-card">
+```
+
+改成：
+
+```vue
+<section class="profile-card glass-card">
+```
+
+意思是：`profile-card` 负责这个卡片自己的布局，`glass-card` 负责通用玻璃质感。
+
+把分类区域：
+
+```vue
+<section>
+```
+
+改成：
+
+```vue
+<section class="glass-card widget-card">
+```
+
+标签区域也一样改成：
+
+```vue
+<section class="glass-card widget-card">
+```
+
+然后给分类和标签按钮加上：
+
+```vue
+class="chip"
+```
+
+文章列表外层改成：
+
+```vue
+<div class="post-list">
+```
+
+文章卡片改成：
+
+```vue
+<article
+  v-for="item in articleList"
+  :key="item.id"
+  class="post-card glass-card"
+  @click="goToDetail(item.id)"
+>
+```
+
+文章时间和分类外层加：
+
+```vue
+<div class="post-meta">
+  <span>{{ item.create_time }}</span>
+  <span>{{ item.category?.name || '未分类' }}</span>
+</div>
+```
+
+写完这一步后，你应该看到：
+
+```text
+1. 左侧卡片有玻璃背景
+2. 分类和标签按钮变成圆角 chip
+3. 文章列表从裸文字变成卡片
+```
+
+如果这一步效果不明显，先不要继续写逻辑，优先检查 class 名字有没有拼错。
+
+### 第二步：把“标签”变量名字统一
+
+你现在脚本里有：
+
+```js
+const labelList = ref([])
+```
+
+但是接口文件叫 `tag.js`，函数叫 `ApiTagList`，后端字段也叫 `tags`。为了以后不混乱，建议统一叫：
+
+```js
+const tagList = ref([])
+```
+
+对应地，把模板里的：
+
+```vue
+v-for="label in labelList"
+```
+
+改成：
+
+```vue
+v-for="tag in tagList"
+```
+
+再把：
+
+```js
+const getLabelList = async () => {
+  const res = await ApiTagList()
+  labelList.value = res.data.data
+}
+```
+
+改成：
+
+```js
+const getTagList = async () => {
+  const res = await ApiTagList()
+  tagList.value = res.data.data
+}
+```
+
+最后 `onMounted` 里也同步改：
+
+```js
+getTagList()
+```
+
+这一小步主要是在学：变量名要跟业务含义统一。项目越往后写，这件事越重要。
+
+### 第三步：给搜索框接上 Vue 数据
+
+你现在搜索框是：
+
+```vue
+<input placeholder="搜索文章" />
+```
+
+先不要追求好看，先学会 Vue 的双向绑定。改成：
+
+```vue
+<input v-model="keyword" placeholder="搜索文章" />
+<button @click="handleSearch">搜索</button>
+```
+
+然后在 `<script setup>` 里加：
+
+```js
+const handleSearch = () => {
+  current.value = 1
+  getArticleList()
+}
+```
+
+这里要理解两件事：
+
+```text
+v-model="keyword"：输入框内容会自动同步到 keyword
+handleSearch：点击搜索时重新请求文章列表
+```
+
+因为 `getArticleList` 里已经传了：
+
+```js
+keyword: keyword.value.trim()
+```
+
+所以只要 `keyword` 变了，点击搜索就能把关键词传给后端。
+
+### 第四步：补分类筛选
+
+先把分类 id 的变量改清楚：
+
+```js
+const activeCategoryId = ref(null)
+```
+
+然后 `getArticleList` 里传：
+
+```js
+category_id: activeCategoryId.value,
+```
+
+分类按钮改成：
+
+```vue
+<button
+  v-for="cat in categoryList"
+  :key="cat.id"
+  class="chip"
+  :class="{ active: activeCategoryId === cat.id }"
+  @click="handleCategoryClick(cat.id)"
+>
+  {{ cat.name }}
+</button>
+```
+
+脚本里加：
+
+```js
+const handleCategoryClick = (categoryId) => {
+  activeCategoryId.value = categoryId
+  current.value = 1
+  getArticleList()
+}
+```
+
+这里的学习重点是：
+
+```text
+:class 是动态 class
+@click 是点击事件
+activeCategoryId 记录当前选中的分类
+```
+
+### 第五步：补标签筛选
+
+标签和分类逻辑几乎一样。先加：
+
+```js
+const activeTagId = ref(null)
+```
+
+`getArticleList` 里传：
+
+```js
+tag_id: activeTagId.value,
+```
+
+标签按钮写成：
+
+```vue
+<button
+  v-for="tag in tagList"
+  :key="tag.id"
+  class="chip"
+  :class="{ active: activeTagId === tag.id }"
+  @click="handleTagClick(tag.id)"
+>
+  #{{ tag.name }}
+</button>
+```
+
+脚本里加：
+
+```js
+const handleTagClick = (tagId) => {
+  activeTagId.value = tagId
+  current.value = 1
+  getArticleList()
+}
+```
+
+这一步写完后，你就完成了博客首页最重要的三个交互：
+
+```text
+搜索文章
+按分类筛选
+按标签筛选
+```
+
+### 第六步：补“全部”和“重置”
+
+当用户点了分类或标签后，要能回到全部文章。模板里加一个按钮：
+
+```vue
+<button class="chip" @click="handleAllClick">全部</button>
+```
+
+脚本里加：
+
+```js
+const handleAllClick = () => {
+  activeCategoryId.value = null
+  activeTagId.value = null
+  keyword.value = ''
+  current.value = 1
+  getArticleList()
+}
+```
+
+这段代码的意思是：把筛选条件全部清空，再重新请求第一页文章。
+
+### 第七步：补加载和空状态
+
+你已经有：
+
+```js
+const loading = ref(false)
+```
+
+也已经在 `getArticleList` 里写了：
+
+```js
+loading.value = true
+finally {
+  loading.value = false
+}
+```
+
+所以模板可以这样写：
+
+```vue
+<el-skeleton v-if="loading" :rows="6" animated />
+
+<el-empty v-else-if="articleList.length === 0" description="暂无文章" />
+
+<div v-else class="post-list">
+  <!-- 文章卡片 -->
+</div>
+```
+
+这一步要理解 Vue 条件渲染：
+
+```text
+v-if：正在加载，显示骨架屏
+v-else-if：加载完但没有文章，显示空状态
+v-else：有文章，显示文章列表
+```
+
+### 第八步：最后再补分页
+
+先加方法：
+
+```js
+const handlePageChange = (newPage) => {
+  current.value = newPage
+  getArticleList()
+}
+```
+
+模板底部写：
+
+```vue
+<div class="pagination-box">
+  <el-pagination
+    background
+    layout="total, prev, pager, next"
+    :total="total"
+    :page-size="size"
+    :current-page="current"
+    @current-change="handlePageChange"
+  />
+</div>
+```
+
+分页的核心是这三个变量：
+
+```text
+current：当前第几页
+size：每页几篇文章
+total：后端告诉你一共有多少篇
+```
+
+### 第九步：路由最后处理
+
+现在路由里有这个页面：
+
+```js
+{
+  path: '/homefuwaridemo',
+  name: 'HomeFuwariDemo',
+  component: () => import('../views/Homefuwaridemo.vue')
+}
+```
+
+建议最后再改成文档里的地址：
+
+```js
+{
+  path: '/home-fuwari',
+  alias: '/homefuwaridemo',
+  name: 'HomeFuwariDemo',
+  component: () => import('../views/HomeFuwariDemo.vue')
+}
+```
+
+这里有两个点：
+
+```text
+path：推荐用 /home-fuwari，可读性更好
+alias：保留旧地址 /homefuwaridemo，防止你之前打开的地址失效
+HomeFuwariDemo.vue：文件大小写最好和真实文件名一致
+```
+
+### 建议学习节奏
+
+不要一次写完上面九步。建议顺序是：
+
+```text
+今天先写第 1 到第 3 步：样式生效、变量统一、搜索
+下一次写第 4 到第 6 步：分类、标签、重置
+再下一次写第 7 到第 9 步：加载、分页、路由收尾
+```
+
+每写完一步都问自己三个问题：
+
+```text
+1. 这个变量放在 ref 里是为了让谁变？
+2. 这个事件 @click 最后调用了哪个函数？
+3. 这个函数最后有没有重新调用 getArticleList？
+```
+
+只要这三件事能说清楚，你就不是在抄代码，而是在真的理解 Vue 页面怎么工作。
