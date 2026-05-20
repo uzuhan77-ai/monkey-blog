@@ -49,32 +49,42 @@
             <!--右侧文章区-->
             <section class="content">
 
-                <!--搜索栏-->
-                <div class="content-head">
-                    <h2>最新文章</h2>
-                </div>
 
                 <!--文章列表-->
-                <div class="post-list">
+                <el-skeleton v-if="loading" :rows="6" animated />
+                
+                <el-empty v-else-if="articleList.length === 0" description="暂无文章" />
+
+
+                <div class="post-list" v-else>
                     <article
                         v-for="item in articleList"
                         :key="item.id"
                         class="post-card glass-card"
                         @click="goToDetail(item.id)"
                     >
+                        <h3>{{ item.title }}</h3>       <!--文章标题-->
                         <div class="post-meta">
-                            <span>{{ item.create_time }}</span>
-                            <span>{{item.category?.name|| '未分类'}}</span>
-                            <span v-if="item.tags && item.tags.length">
-                              {{item.tags[0].name}}
+                            <span>{{ item.create_time }}</span>              <!--文章发布时间--> 
+
+                            <span v-if="item.category" @click.stop="handleCategoryClick(item.category.id)">
+                              {{ item.category.name }}                        <!--文章分类-->
                             </span>
+
+                            <template v-if="item.tags && item.tags.length">
+                              <span 
+                                v-for="tag in item.tags" 
+                                :key="tag.id"
+                                @click.stop="handleTagClick(tag.id)"
+                              >
+                                {{ tag.name }}    <!--文章标签-->
+                              </span>
+                            </template>
                             <span v-else>无标签</span>
+
                         </div>
-                        <h3>{{ item.title }}</h3>
-                        <p>{{item.summary || '暂无摘要'}}</p>
-                        <div class="post-extra">
-                          <span>阅读全文</span>
-                        </div>
+
+                        <p>{{item.summary || '暂无摘要'}}</p>     <!--文章摘要-->
                     </article>
                 </div>
 
@@ -97,8 +107,8 @@
 </template>
 
 <script setup>
-import {ref,onMounted} from 'vue'
-import { useRouter } from 'vue-router'
+import {ref,onMounted,watch} from 'vue'
+import { useRouter,useRoute } from 'vue-router'
 import { ApiCategoryList } from '../api/category'
 import { ApiTagList } from '../api/tag'
 import { ApiArticleList } from '../api/article'
@@ -118,6 +128,7 @@ const tagId = ref(null)
 const keyword = ref('')
 
 const router = useRouter()
+const route = useRoute()
 
 const goToDetail = (id) =>{
     //用router.push跳转
@@ -151,6 +162,11 @@ const getArticleList = async () =>{
             tag_id: tagId.value,
             keyword: keyword.value.trim(),
         })
+        console.log('query:', {
+        categoryId: categoryId.value,
+        tagId: tagId.value,
+        total: res.data.total
+      })
         articleList.value = res.data.data
         total.value = res.data.total
     }catch(error){
@@ -160,36 +176,71 @@ const getArticleList = async () =>{
     }
 }
 
-const handleSearch = () =>{
-  current.value =1
-  getArticleList()
-}
 
 const handleCategoryClick = (id) =>{
   categoryId.value = id
   tagId.value = null 
   current.value = 1
+  keyword.value = ''
+  if(route.query.keyword){
+    router.replace({
+      path: route.path,
+      query: {},
+    })}
   getArticleList()
+  scrollToArticles()
 }
 
 const handleTagClick = (id) =>{
   tagId.value = id
   categoryId.value = null 
   current.value = 1
+  keyword.value= '' 
+  if(route.query.keyword){
+    router.replace({
+      path: route.path,
+      query: {},  
+  })}
   getArticleList()
+  scrollToArticles()
 }
 
 const handlePageChange =(page) =>{
   current.value = page
   getArticleList()
+  scrollToArticles()
+}
+
+const scrollToArticles = () =>{
+  document.querySelector('.content')?.scrollIntoView({ 
+     behavior: 'smooth',
+     block: 'start',})
 }
 
 
 onMounted(()=>{
     getCategoryList() //页面挂载完成后自动执行
     getLabelList() 
+    if(route.query.keyword){
+      keyword.value = String(route.query.keyword)
+    }
     getArticleList()
 })
+
+watch(
+  () => route.query.keyword,
+  (newKeyword) => {
+    if(!newKeyword) return
+
+    keyword.value = String(newKeyword)
+    current.value = 1
+    categoryId.value = null
+    tagId.value = null
+
+    getArticleList()
+    scrollToArticles()
+  }
+)
 
 
 </script>
@@ -223,51 +274,54 @@ onMounted(()=>{
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   align-self: start;
   position: sticky;
   top: 96px;
 }
 
 .profile-card {
-  padding: 26px 24px;
+  padding: 16px 16px 20px;
+  text-align: center;
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 16px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
-  background: rgba(47, 141, 244, 0.12);
+  background: rgba(47, 141, 244, 0.1);
   color: #2f8df4;
   font-weight: 800;
-  box-shadow: 0 12px 24px rgba(47, 141, 244, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(47, 141, 244, 0.08);
 }
 
 .profile-card h1 {
-  margin: 24px 0 0;
+  margin: 0;
   color: rgba(31, 36, 48, 0.92);
-  font-size: 30px;
+  font-size: 22px;
   line-height: 1.16;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 .profile-card p {
-  margin: 20px 0 0;
-  color: rgba(31, 36, 48, 0.66);
-  line-height: 1.75;
+  margin: 10px 4px 0;
+  color: rgba(31, 36, 48, 0.52);
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .widget-card {
-  padding: 22px 20px 18px;
+  padding: 20px 20px 16px;
 }
 
 .widget-card h2 {
   position: relative;
-  margin: 0 0 16px;
-  padding-left: 12px;
-  font-size: 18px;
+  margin: 0 0 14px;
+  padding-left: 11px;
+  font-size: 17px;
   line-height: 1.3;
   color: rgba(31, 36, 48, 0.9);
 }
@@ -284,12 +338,12 @@ onMounted(()=>{
 }
 
 .chip {
-  margin: 0 8px 10px 0;
-  padding: 7px 11px;
+  margin: 0 7px 9px 0;
+  padding: 6px 10px;
   border: 0;
-  border-radius: 10px;
-  background: rgba(47, 141, 244, 0.08);
-  color: rgba(47, 111, 171, 0.92);
+  border-radius: 9px;
+  background: rgba(47, 141, 244, 0.07);
+  color: rgba(47, 111, 171, 0.88);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -307,17 +361,10 @@ onMounted(()=>{
   display: none;
 }
 
-.content-head {
-  margin-bottom: 18px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .state-card {
@@ -326,41 +373,46 @@ onMounted(()=>{
 
 .post-card {
   position: relative;
-  padding: 26px 78px 24px 28px;
+  padding: 22px 76px 22px 28px;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .post-card.glass-card {
-  border-color: rgba(31, 36, 48, 0.06);
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.035);
+  border-color: rgba(31, 36, 48, 0.055);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.032);
   border-radius: 16px;
 }
 
 .post-card::after {
   content: "›";
   position: absolute;
-  top: 14px;
-  right: 14px;
-  bottom: 14px;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
   width: 52px;
-  border-radius: 14px;
+  border-radius: 13px;
   display: grid;
   place-items: center;
-  background: rgba(47, 141, 244, 0.08);
+  background: rgba(47, 141, 244, 0.075);
   color: #2f8df4;
-  font-size: 36px;
+  font-size: 34px;
   line-height: 1;
-  opacity: 0.82;
+  opacity: 0.78;
   transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: rgba(47, 141, 244, 0.18);
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.075);
 }
 
 .post-card:hover::after {
@@ -372,9 +424,11 @@ onMounted(()=>{
 .post-meta {
   color: rgba(31, 36, 48, 0.5);
   font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .post-meta span {
@@ -395,12 +449,21 @@ onMounted(()=>{
   color: rgba(31, 36, 48, 0.42);
 }
 
+.post-meta span:not(:first-child) {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.post-meta span:not(:first-child):hover {
+  color: #2f8df4;
+}
+
 .post-card h3 {
   position: relative;
-  margin: 16px 0 12px;
+  margin: 0 0 11px;
   padding-left: 16px;
-  font-size: 26px;
-  line-height: 1.38;
+  font-size: 25px;
+  line-height: 1.34;
   color: rgba(31, 36, 48, 0.92);
   transition: color 0.2s ease;
 }
@@ -423,25 +486,59 @@ onMounted(()=>{
 .post-card p {
   margin: 0;
   color: rgba(31, 36, 48, 0.66);
-  line-height: 1.85;
-}
-
-.post-extra {
-  margin-top: 18px;
-  color: rgba(31, 36, 48, 0.38);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.post-extra span::after {
-  content: " →";
-  color: #2f8df4;
-  font-weight: 700;
+  line-height: 1.75;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .pagination-box {
   margin-top: 26px;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .home-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .profile-card {
+    text-align: left;
+  }
+
+  .avatar {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-shell {
+    width: min(100% - 28px, 1180px);
+    padding-top: 22px;
+  }
+
+  .post-card {
+    padding: 20px 24px 68px;
+  }
+
+  .post-card::after {
+    top: auto;
+    right: 14px;
+    bottom: 12px;
+    left: 14px;
+    width: auto;
+    height: 42px;
+    font-size: 30px;
+  }
+
+  .post-card h3 {
+    font-size: 22px;
+  }
 }
 </style>

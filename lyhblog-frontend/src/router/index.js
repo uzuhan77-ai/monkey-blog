@@ -5,12 +5,13 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('../views/Home.vue')
+        component: () => import('../views/HomeFuwariDemo.vue')
     },
     {
-        path: '/homefuwaridemo',
+        path: '/home-fuwari',
+        alias: '/homefuwaridemo',
         name: 'HomeFuwariDemo',
-        component: () => import('../views/Homefuwaridemo.vue')
+        component: () => import('../views/HomeFuwariDemo.vue')
     },
     {
         path:'/project',
