@@ -105,110 +105,181 @@
   <style scoped>
   .about-page {
     min-height: 100vh;
-    background: linear-gradient(180deg, #f7f5f0 0%, #eef2ea 100%);
-    color: #18231d;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(246, 250, 255, 0.5)),
+      #f6f8fb;
+    color: #1f2430;
   }
   
   .about-hero,
   .about-section {
-    max-width: 1180px;
+    max-width: 1168px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 28px 24px;
   }
   
   .about-hero {
     display: grid;
     grid-template-columns: 1.25fr 0.9fr;
-    gap: 24px;
+    gap: 16px;
+    align-items: stretch;
   }
   
   .hero-main,
   .hero-side,
   .panel-card {
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.84);
-    border: 1px solid rgba(24, 35, 29, 0.08);
-    box-shadow: 0 20px 60px rgba(24, 35, 29, 0.06);
-    padding: 32px;
+    padding: 30px;
+    border: 1px solid rgba(31, 36, 48, 0.06);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+    backdrop-filter: blur(16px);
+  }
+
+  .hero-main {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-main::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, #2f8df4, rgba(47, 141, 244, 0.18), transparent);
   }
   
   .eyebrow {
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     font-size: 12px;
-    color: #6b796f;
+    color: rgba(47, 111, 171, 0.72);
+    font-weight: 700;
   }
   
   .hero-main h1,
   .panel-card h2 {
-    margin: 16px 0 0;
-    font-size: 38px;
-    line-height: 1.2;
+    margin: 14px 0 0;
+    color: rgba(31, 36, 48, 0.94);
+    font-size: 36px;
+    line-height: 1.24;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  .panel-card h2 {
+    font-size: 28px;
   }
   
   .hero-desc {
     margin-top: 18px;
-    color: #4b5851;
-    line-height: 1.9;
+    max-width: 720px;
+    color: rgba(31, 36, 48, 0.64);
+    line-height: 1.85;
+    text-wrap: pretty;
   }
   
   .focus-list,
   .plain-list {
     margin: 18px 0 0;
     padding-left: 18px;
-    line-height: 1.9;
-    color: #334139;
+    color: rgba(31, 36, 48, 0.68);
+    line-height: 1.85;
+  }
+
+  .focus-list li,
+  .plain-list li {
+    margin-bottom: 4px;
   }
   
   .two-column {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .panel-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: rgba(47, 141, 244, 0.2);
   }
   
   .info-list {
     margin-top: 18px;
     display: grid;
-    gap: 14px;
+    gap: 12px;
   }
   
   .info-item {
-    padding: 18px;
-    border-radius: 18px;
-    background: #edf4e9;
+    padding: 16px;
+    border: 1px solid rgba(31, 36, 48, 0.05);
+    border-radius: 14px;
+    background: rgba(47, 141, 244, 0.055);
   }
   
   .info-item span {
     display: block;
-    color: #5e6d64;
+    color: rgba(31, 36, 48, 0.52);
     font-size: 13px;
     margin-bottom: 8px;
   }
   
   .info-item strong {
-    font-size: 20px;
-    color: #173e2f;
+    color: rgba(31, 36, 48, 0.88);
+    font-size: 18px;
+    line-height: 1.35;
   }
   
   .tag-wrap {
     margin-top: 18px;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
   
   .skill-tag {
-    padding: 10px 16px;
+    min-height: 34px;
+    padding: 8px 13px;
     border-radius: 999px;
-    background: #dfe8d8;
-    color: #234735;
+    background: rgba(47, 141, 244, 0.08);
+    color: rgba(47, 111, 171, 0.9);
+    font-size: 14px;
+    font-weight: 600;
   }
   
   @media (max-width: 1024px) {
     .about-hero,
     .two-column {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about-hero,
+    .about-section {
+      padding: 22px 14px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .panel-card {
+      padding: 24px 20px;
+    }
+
+    .hero-main h1 {
+      font-size: 30px;
+    }
+
+    .panel-card h2 {
+      font-size: 24px;
     }
   }
   </style>

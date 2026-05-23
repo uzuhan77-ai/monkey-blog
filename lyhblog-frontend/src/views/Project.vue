@@ -150,56 +150,80 @@
   <style scoped>
   .project-page {
     min-height: 100vh;
-    background: linear-gradient(180deg, #f7f5f0 0%, #eef2ea 100%);
-    color: #18231d;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(246, 250, 255, 0.5)),
+      #f6f8fb;
+    color: #1f2430;
   }
   
   .project-hero,
   .project-section {
-    max-width: 1180px;
+    max-width: 1168px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 28px 24px;
   }
   
   .project-hero {
     display: grid;
     grid-template-columns: 1.3fr 0.9fr;
-    gap: 24px;
+    gap: 16px;
+    align-items: stretch;
   }
   
   .hero-card,
   .module-card,
   .panel-card {
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.84);
-    border: 1px solid rgba(24, 35, 29, 0.08);
-    box-shadow: 0 20px 60px rgba(24, 35, 29, 0.06);
+    border: 1px solid rgba(31, 36, 48, 0.06);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+    backdrop-filter: blur(16px);
   }
   
   .intro-card,
   .status-card,
   .panel-card {
-    padding: 32px;
+    padding: 30px;
+  }
+
+  .intro-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, #2f8df4, rgba(47, 141, 244, 0.18), transparent);
   }
   
   .eyebrow {
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     font-size: 12px;
-    color: #6b796f;
+    color: rgba(47, 111, 171, 0.72);
+    font-weight: 700;
   }
   
   .intro-card h1 {
-    margin: 16px 0;
-    font-size: 40px;
-    line-height: 1.2;
+    max-width: 720px;
+    margin: 14px 0;
+    color: rgba(31, 36, 48, 0.94);
+    font-size: 38px;
+    line-height: 1.22;
+    letter-spacing: 0;
+    text-wrap: pretty;
   }
   
   .hero-desc {
     margin: 0;
-    color: #4b5851;
-    line-height: 1.8;
+    max-width: 720px;
+    color: rgba(31, 36, 48, 0.64);
+    line-height: 1.78;
+    text-wrap: pretty;
   }
   
   .hero-actions {
@@ -208,84 +232,155 @@
     flex-wrap: wrap;
     gap: 12px;
   }
+
+  .hero-actions :deep(.el-button) {
+    min-height: 40px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .hero-actions :deep(.el-button--primary) {
+    border-color: #2f8df4;
+    background: #2f8df4;
+    box-shadow: 0 8px 18px rgba(47, 141, 244, 0.16);
+  }
+
+  .hero-actions :deep(.el-button.is-plain) {
+    border-color: rgba(47, 141, 244, 0.16);
+    background: rgba(47, 141, 244, 0.06);
+    color: #2f8df4;
+  }
   
   .status-grid {
     margin-top: 18px;
     display: grid;
-    gap: 14px;
+    gap: 12px;
   }
   
   .status-item {
-    padding: 18px;
-    border-radius: 18px;
-    background: #edf4e9;
+    padding: 16px;
+    border: 1px solid rgba(31, 36, 48, 0.05);
+    border-radius: 14px;
+    background: rgba(47, 141, 244, 0.055);
   }
   
   .status-item span {
     display: block;
     margin-bottom: 8px;
-    color: #5e6d64;
+    color: rgba(31, 36, 48, 0.52);
     font-size: 13px;
   }
   
   .status-item strong {
-    font-size: 20px;
-    color: #173e2f;
+    color: rgba(31, 36, 48, 0.88);
+    font-size: 18px;
+    line-height: 1.35;
   }
   
   .section-head h2,
   .panel-card h2 {
-    margin: 12px 0 0;
-    font-size: 30px;
+    margin: 10px 0 0;
+    color: rgba(31, 36, 48, 0.92);
+    font-size: 28px;
+    line-height: 1.28;
   }
   
   .tag-wrap {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
+    padding: 24px;
+    border: 1px solid rgba(31, 36, 48, 0.06);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
   }
   
   .stack-tag {
-    padding: 10px 16px;
+    min-height: 34px;
+    padding: 8px 13px;
     border-radius: 999px;
-    background: #dfe8d8;
-    color: #234735;
+    background: rgba(47, 141, 244, 0.08);
+    color: rgba(47, 111, 171, 0.9);
+    font-size: 14px;
+    font-weight: 600;
   }
   
   .module-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
   }
   
   .module-card {
-    padding: 28px;
+    padding: 24px;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .module-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(47, 141, 244, 0.18);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
   }
   
   .module-card h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    font-size: 22px;
+    position: relative;
+    margin: 0 0 12px;
+    padding-left: 15px;
+    color: rgba(31, 36, 48, 0.92);
+    font-size: 21px;
+    line-height: 1.34;
+  }
+
+  .module-card h3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 4px;
+    height: 1.05em;
+    border-radius: 999px;
+    background: #2f8df4;
   }
   
   .module-card p {
     margin: 0 0 16px;
-    color: #526059;
-    line-height: 1.8;
+    color: rgba(31, 36, 48, 0.62);
+    line-height: 1.75;
+    text-wrap: pretty;
   }
   
   .module-card ul,
   .plain-list {
     margin: 0;
     padding-left: 18px;
-    color: #334139;
-    line-height: 1.9;
+    color: rgba(31, 36, 48, 0.68);
+    line-height: 1.85;
   }
   
   .two-column {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .panel-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: rgba(47, 141, 244, 0.2);
   }
   
   @media (max-width: 1024px) {
@@ -293,6 +388,33 @@
     .two-column,
     .module-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .project-hero,
+    .project-section {
+      padding: 22px 14px;
+    }
+
+    .intro-card,
+    .status-card,
+    .panel-card {
+      padding: 24px 20px;
+    }
+
+    .intro-card h1 {
+      font-size: 30px;
+    }
+
+    .section-head h2,
+    .panel-card h2 {
+      font-size: 24px;
+    }
+
+    .module-card,
+    .tag-wrap {
+      padding: 20px;
     }
   }
   </style>

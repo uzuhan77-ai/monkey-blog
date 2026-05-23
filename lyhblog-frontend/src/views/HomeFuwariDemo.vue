@@ -7,44 +7,14 @@
         <main class="home-shell">
 
             <!--左侧栏-->
-            <aside class="sidebar">
-
-                <!--个人信息卡-->
-                <section class="profile-card glass-card">
-                  <div class="avatar">LYH</div>
-
-                  <h1>LYH BLOG</h1>
-
-                  <p> 记录AI编程和项目实践.</p>
-                </section>
-
-                <!--分类-->
-                <section class="glass-card widget-card">
-                    <h2>分类</h2>
-                    <button class="chip"
-                            v-for="cat in categoryList"
-                            :key="cat.id"
-                            :class="{active:categoryId == cat.id}"
-                            @click="handleCategoryClick(cat.id)"
-                        >
-                        {{ cat.name }}
-                    </button>
-                </section>
-
-                <!--标签-->
-                <section class="glass-card widget-card">
-                    <h2>标签</h2>
-                    <button class="chip"
-                        v-for="label in labelList"
-                        :key="label.id"
-                        :class="{active:tagId == label.id}"
-                        @click="handleTagClick(label.id)"
-                    >
-                    {{ label.name }}
-                  </button>
-                </section>
-
-            </aside>
+            <FrontSidebar
+                :category-list="categoryList"
+                :tag-list="labelList"
+                :category-id="categoryId"
+                :tag-id="tagId"
+                @select-category="handleCategoryClick"
+                @select-tag="handleTagClick"
+            />
 
             <!--右侧文章区-->
             <section class="content">
@@ -113,6 +83,7 @@ import { ApiCategoryList } from '../api/category'
 import { ApiTagList } from '../api/tag'
 import { ApiArticleList } from '../api/article'
 import FrontHeader from '../components/FrontHeader.vue'
+import FrontSidebar from '../components/FrontSidebar.vue'
 
 const categoryList = ref([]) //分类列表
 const labelList = ref([]) //标签列表
@@ -249,18 +220,19 @@ watch(
 .home-page {
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(246, 250, 255, 0.42)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(246, 250, 255, 0.5)),
     #f6f8fb;
   color: #1f2430;
 }
 
 .home-shell {
-  width: min(1180px, calc(100% - 48px));
+  width: min(1168px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 36px 0 64px;
+  padding: 28px 0 64px;
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  gap: 20px;
+  align-items: start;
+  gap: 16px;
 }
 
 .glass-card {
@@ -271,100 +243,10 @@ watch(
   border-radius: 16px;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-self: start;
-  position: sticky;
-  top: 96px;
-}
-
-.profile-card {
-  padding: 16px 16px 20px;
-  text-align: center;
-}
-
-.avatar {
-  width: 116px;
-  height: 116px;
-  margin: 0 auto 16px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  background: rgba(47, 141, 244, 0.1);
-  color: #2f8df4;
-  font-weight: 800;
-  box-shadow: inset 0 0 0 1px rgba(47, 141, 244, 0.08);
-}
-
-.profile-card h1 {
-  margin: 0;
-  color: rgba(31, 36, 48, 0.92);
-  font-size: 22px;
-  line-height: 1.16;
-  letter-spacing: 0;
-}
-
-.profile-card p {
-  margin: 10px 4px 0;
-  color: rgba(31, 36, 48, 0.52);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.widget-card {
-  padding: 20px 20px 16px;
-}
-
-.widget-card h2 {
-  position: relative;
-  margin: 0 0 14px;
-  padding-left: 11px;
-  font-size: 17px;
-  line-height: 1.3;
-  color: rgba(31, 36, 48, 0.9);
-}
-
-.widget-card h2::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.22em;
-  width: 4px;
-  height: 1em;
-  border-radius: 999px;
-  background: #2f8df4;
-}
-
-.chip {
-  margin: 0 7px 9px 0;
-  padding: 6px 10px;
-  border: 0;
-  border-radius: 9px;
-  background: rgba(47, 141, 244, 0.07);
-  color: rgba(47, 111, 171, 0.88);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chip:hover,
-.chip.active {
-  background: rgba(47, 141, 244, 0.14);
-  color: #2f8df4;
-  transform: translateY(-1px);
-}
-
-.widget-card > button:not(.chip) {
-  display: none;
-}
-
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .state-card {
@@ -373,7 +255,7 @@ watch(
 
 .post-card {
   position: relative;
-  padding: 22px 76px 22px 28px;
+  padding: 21px 76px 21px 28px;
   cursor: pointer;
   overflow: hidden;
   transition:
@@ -385,18 +267,18 @@ watch(
 
 .post-card.glass-card {
   border-color: rgba(31, 36, 48, 0.055);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.032);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
   border-radius: 16px;
 }
 
 .post-card::after {
   content: "›";
   position: absolute;
-  top: 12px;
-  right: 12px;
-  bottom: 12px;
-  width: 52px;
+  top: 13px;
+  right: 13px;
+  bottom: 13px;
+  width: 50px;
   border-radius: 13px;
   display: grid;
   place-items: center;
@@ -409,10 +291,10 @@ watch(
 }
 
 .post-card:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: rgba(47, 141, 244, 0.18);
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.075);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
 }
 
 .post-card:hover::after {
@@ -425,7 +307,7 @@ watch(
   color: rgba(31, 36, 48, 0.5);
   font-size: 13px;
   line-height: 1.45;
-  margin-bottom: 12px;
+  margin-bottom: 11px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -460,9 +342,9 @@ watch(
 
 .post-card h3 {
   position: relative;
-  margin: 0 0 11px;
+  margin: 0 0 10px;
   padding-left: 16px;
-  font-size: 25px;
+  font-size: 24px;
   line-height: 1.34;
   color: rgba(31, 36, 48, 0.92);
   transition: color 0.2s ease;
@@ -486,7 +368,8 @@ watch(
 .post-card p {
   margin: 0;
   color: rgba(31, 36, 48, 0.66);
-  line-height: 1.75;
+  line-height: 1.72;
+  font-size: 15px;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 3;
@@ -494,32 +377,33 @@ watch(
 }
 
 .pagination-box {
-  margin-top: 26px;
+  margin-top: 28px;
   display: flex;
   justify-content: center;
+}
+
+.pagination-box :deep(.el-pagination.is-background .el-pager li),
+.pagination-box :deep(.el-pagination.is-background button) {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.pagination-box :deep(.el-pagination.is-background .el-pager li.is-active) {
+  background: #2f8df4;
 }
 
 @media (max-width: 900px) {
   .home-shell {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .sidebar {
-    position: static;
-  }
-
-  .profile-card {
-    text-align: left;
-  }
-
-  .avatar {
-    margin-left: 0;
-  }
 }
 
 @media (max-width: 640px) {
   .home-shell {
-    width: min(100% - 28px, 1180px);
+    width: min(100% - 28px, 1168px);
     padding-top: 22px;
   }
 

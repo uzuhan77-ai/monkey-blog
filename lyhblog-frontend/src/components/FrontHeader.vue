@@ -69,6 +69,7 @@ watch(
 
 const navItems = [
     {path: '/', label: '首页'},
+    {path: '/archive', label: '归档'},
     {path: '/project', label:'项目'},
     {path:'/about', label:'关于'}
 ]
@@ -82,19 +83,24 @@ const isActive = (path) => route.path === path
   position: sticky;
   top: 0;
   z-index: 20;
+  padding: 8px 24px 0;
+  background: rgba(246, 248, 251, 0.72);
   backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.78);
-  border-bottom: 1px solid rgba(47, 141, 244, 0.08);
 }
 
 .header-inner {
-  max-width: 1180px;
+  max-width: 1168px;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 22px;
+  border: 1px solid rgba(31, 36, 48, 0.055);
+  border-radius: 0 0 14px 14px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.045);
+  backdrop-filter: blur(18px);
 }
 
 .brand {
@@ -103,6 +109,7 @@ const isActive = (path) => route.path === path
   gap: 8px;
   text-decoration: none;
   color: #2f8df4;
+  white-space: nowrap;
 }
 
 .brand-mark {
@@ -129,10 +136,12 @@ const isActive = (path) => route.path === path
 }
 
 .nav-link {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 999px;
   text-decoration: none;
-  color: #44524b;
+  color: rgba(31, 36, 48, 0.72);
+  font-size: 15px;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 
@@ -145,11 +154,11 @@ const isActive = (path) => route.path === path
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .header-search {
-  width: 170px;
+  width: 164px;
   height: 38px;
   padding: 0 6px 0 14px;
   display: flex;
@@ -167,7 +176,7 @@ const isActive = (path) => route.path === path
 }
 
 .header-search:focus-within {
-  width: 230px;
+  width: 224px;
   border-color: rgba(47, 141, 244, 0.22);
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
@@ -221,16 +230,23 @@ const isActive = (path) => route.path === path
 }
 
 .solid-link {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 999px;
   background: #2f8df4;
   color: #fff;
+  box-shadow: 0 8px 18px rgba(47, 141, 244, 0.16);
 }
 
 @media (max-width: 860px) {
+  .front-header {
+    padding: 8px 14px 0;
+  }
+
   .header-inner {
     flex-direction: column;
     align-items: stretch;
+    padding: 14px;
+    border-radius: 0 0 16px 16px;
   }
 
   .brand,

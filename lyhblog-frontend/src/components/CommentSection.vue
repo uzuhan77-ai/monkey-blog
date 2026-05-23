@@ -112,46 +112,130 @@ onMounted(() =>{
 <style scoped>
 .comment-section {
   margin-top: 40px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid rgba(31, 36, 48, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+  backdrop-filter: blur(16px);
+}
+
+.comment-section h3 {
+  margin: 0 0 18px;
+  color: rgba(31, 36, 48, 0.9);
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 700;
 }
 
 .comment-form {
-  margin: 20px 0;
+  margin: 18px 0 22px;
+}
+
+.comment-form :deep(.el-textarea__inner) {
+  min-height: 104px;
+  border-color: rgba(31, 36, 48, 0.08);
+  border-radius: 14px;
+  background: rgba(246, 250, 255, 0.62);
+  color: rgba(31, 36, 48, 0.78);
+  line-height: 1.7;
+  box-shadow: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.comment-form :deep(.el-textarea__inner:focus) {
+  border-color: rgba(47, 141, 244, 0.24);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
+}
+
+.comment-form :deep(.el-button) {
+  min-height: 36px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #2f8df4;
+  box-shadow: 0 8px 18px rgba(47, 141, 244, 0.18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.comment-form :deep(.el-button:hover) {
+  background: #267fdf;
+  box-shadow: 0 10px 24px rgba(47, 141, 244, 0.22);
+  transform: translateY(-1px);
 }
 
 .login-tip {
-  margin: 20px 0;
+  margin: 18px 0 22px;
   text-align: center;
-  padding: 20px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(47, 141, 244, 0.055);
+  color: rgba(31, 36, 48, 0.58);
+}
+
+.login-tip :deep(.el-button) {
+  color: #2f8df4;
+  font-weight: 600;
+}
+
+.commment-list {
+  display: flex;
+  flex-direction: column;
 }
 
 .comment-item {
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(31, 36, 48, 0.07);
+}
+
+.comment-item:first-child {
+  padding-top: 4px;
+}
+
+.comment-item:last-child {
+  border-bottom: 0;
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
 .username {
-  font-weight: bold;
-  color: #409eff;
+  color: #2f8df4;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .time {
-  color: #999;
+  color: rgba(31, 36, 48, 0.4);
   font-size: 12px;
+  line-height: 1.6;
 }
 
 .comment-content {
-  color: #606266;
-  line-height: 1.6;
+  color: rgba(31, 36, 48, 0.68);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+  .comment-section {
+    padding: 20px 18px;
+  }
+
+  .comment-header {
+    flex-direction: column;
+    gap: 2px;
+  }
 }
 </style>
