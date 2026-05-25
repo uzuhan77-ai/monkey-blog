@@ -56,31 +56,53 @@ defineEmits(['select-category', 'select-tag'])
 
 .card {
   border: 1px solid rgba(31, 36, 48, 0.06);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
   backdrop-filter: blur(16px);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(47, 141, 244, 0.11);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
 }
 
 .card:first-child {
-  padding: 14px 14px 20px;
+  padding: 13px 13px 19px;
   text-align: center;
 }
 
 .avatar {
   width: 100%;
-  aspect-ratio: 1 / 0.82;
+  aspect-ratio: 1 / 0.78;
   margin: 0 auto 16px;
   border-radius: 13px;
   display: grid;
   place-items: center;
   background:
-    linear-gradient(135deg, rgba(47, 141, 244, 0.14), rgba(47, 141, 244, 0.045)),
-    rgba(47, 141, 244, 0.08);
+    linear-gradient(135deg, rgba(47, 141, 244, 0.18), rgba(255, 255, 255, 0.58)),
+    rgba(47, 141, 244, 0.085);
   color: #2f8df4;
-  font-size: 28px;
+  font-size: 29px;
   font-weight: 800;
-  box-shadow: inset 0 0 0 1px rgba(47, 141, 244, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(47, 141, 244, 0.1),
+    0 8px 20px rgba(47, 141, 244, 0.075);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:first-child:hover .avatar {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 0 0 1px rgba(47, 141, 244, 0.14),
+    0 12px 28px rgba(47, 141, 244, 0.11);
 }
 
 .card h1,
@@ -92,6 +114,16 @@ defineEmits(['select-category', 'select-tag'])
   letter-spacing: 0;
 }
 
+.card h1::after {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 4px;
+  margin: 12px auto 0;
+  border-radius: 999px;
+  background: #2f8df4;
+}
+
 .card p {
   margin: 9px 4px 0;
   color: rgba(31, 36, 48, 0.52);
@@ -100,13 +132,13 @@ defineEmits(['select-category', 'select-tag'])
 }
 
 .card:not(:first-child) {
-  padding: 18px 18px 14px;
+  padding: 17px 18px 14px;
 }
 
 .card h3 {
   position: relative;
-  margin: 0 0 14px;
-  padding-left: 11px;
+  margin: 0 0 13px;
+  padding-left: 14px;
   color: rgba(31, 36, 48, 0.9);
   font-size: 17px;
   line-height: 1.3;
@@ -116,36 +148,69 @@ defineEmits(['select-category', 'select-tag'])
   content: "";
   position: absolute;
   left: 0;
-  top: 0.22em;
+  top: 0.18em;
   width: 4px;
-  height: 1em;
+  height: 1.08em;
   border-radius: 999px;
   background: #2f8df4;
 }
 
 .card button {
-  margin: 0 7px 8px 0;
-  min-height: 30px;
-  padding: 6px 11px;
+  min-height: 34px;
   border: 0;
   border-radius: 10px;
-  background: rgba(47, 141, 244, 0.07);
-  color: rgba(47, 111, 171, 0.88);
+  background: transparent;
+  color: rgba(31, 36, 48, 0.68);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 650;
   cursor: pointer;
   transition:
     transform 0.2s ease,
+    padding 0.2s ease,
     background 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:nth-child(2) button {
+  width: 100%;
+  margin: 0 0 4px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.card:nth-child(3) button {
+  margin: 0 7px 8px 0;
+  padding: 6px 11px;
+  background: rgba(47, 141, 244, 0.07);
+  color: rgba(47, 111, 171, 0.88);
 }
 
 .card button:hover,
 .card button.active {
-  background: rgba(47, 141, 244, 0.14);
+  background: rgba(47, 141, 244, 0.105);
   color: #2f8df4;
+}
+
+.card:nth-child(2) button:hover,
+.card:nth-child(2) button.active {
+  padding-left: 14px;
+  transform: translateX(1px);
+}
+
+.card:nth-child(3) button:hover,
+.card:nth-child(3) button.active {
+  background: rgba(47, 141, 244, 0.14);
   transform: translateY(-1px);
   box-shadow: 0 6px 14px rgba(47, 141, 244, 0.08);
+}
+
+.card button:focus-visible {
+  outline: 2px solid rgba(47, 141, 244, 0.35);
+  outline-offset: 2px;
 }
 
 @media (max-width: 900px) {
@@ -161,6 +226,10 @@ defineEmits(['select-category', 'select-tag'])
     width: 116px;
     height: 116px;
     aspect-ratio: auto;
+    margin-left: 0;
+  }
+
+  .card h1::after {
     margin-left: 0;
   }
 }

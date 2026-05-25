@@ -246,7 +246,7 @@ watch(
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .state-card {
@@ -255,7 +255,8 @@ watch(
 
 .post-card {
   position: relative;
-  padding: 21px 76px 21px 28px;
+  min-height: 138px;
+  padding: 26px 78px 24px 36px;
   cursor: pointer;
   overflow: hidden;
   transition:
@@ -266,35 +267,38 @@ watch(
 }
 
 .post-card.glass-card {
-  border-color: rgba(31, 36, 48, 0.055);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+  border-color: rgba(31, 36, 48, 0.045);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.028);
   border-radius: 16px;
 }
 
 .post-card::after {
   content: "›";
   position: absolute;
-  top: 13px;
-  right: 13px;
-  bottom: 13px;
-  width: 50px;
-  border-radius: 13px;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: 52px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  background: rgba(47, 141, 244, 0.075);
+  background: rgba(47, 141, 244, 0.08);
   color: #2f8df4;
-  font-size: 34px;
+  font-size: 38px;
   line-height: 1;
-  opacity: 0.78;
-  transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0.72;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: rgba(47, 141, 244, 0.18);
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
 }
 
 .post-card:hover::after {
@@ -307,7 +311,7 @@ watch(
   color: rgba(31, 36, 48, 0.5);
   font-size: 13px;
   line-height: 1.45;
-  margin-bottom: 11px;
+  margin-bottom: 13px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -342,38 +346,45 @@ watch(
 
 .post-card h3 {
   position: relative;
-  margin: 0 0 10px;
-  padding-left: 16px;
-  font-size: 24px;
-  line-height: 1.34;
+  margin: 0 0 12px;
+  padding-left: 18px;
+  padding-right: 10px;
+  font-size: 28px;
+  line-height: 1.26;
   color: rgba(31, 36, 48, 0.92);
-  transition: color 0.2s ease;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .post-card h3::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.32em;
+  top: 0.22em;
   width: 4px;
-  height: 1.05em;
+  height: 1.18em;
   border-radius: 999px;
   background: #2f8df4;
 }
 
 .post-card:hover h3 {
   color: #2f8df4;
+  transform: translateX(2px);
 }
 
 .post-card p {
   margin: 0;
   color: rgba(31, 36, 48, 0.66);
-  line-height: 1.72;
+  line-height: 1.7;
   font-size: 15px;
   display: -webkit-box;
   overflow: hidden;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  text-wrap: pretty;
 }
 
 .pagination-box {
@@ -387,10 +398,20 @@ watch(
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .pagination-box :deep(.el-pagination.is-background .el-pager li.is-active) {
   background: #2f8df4;
+}
+
+.pagination-box :deep(.el-pagination.is-background .el-pager li:hover),
+.pagination-box :deep(.el-pagination.is-background button:hover) {
+  color: #2f8df4;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 900px) {
@@ -408,7 +429,8 @@ watch(
   }
 
   .post-card {
-    padding: 20px 24px 68px;
+    min-height: 0;
+    padding: 22px 22px 68px;
   }
 
   .post-card::after {
@@ -422,7 +444,11 @@ watch(
   }
 
   .post-card h3 {
-    font-size: 22px;
+    font-size: 23px;
+  }
+
+  .post-card p {
+    -webkit-line-clamp: 3;
   }
 }
 </style>

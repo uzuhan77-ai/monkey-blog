@@ -17,31 +17,44 @@
 
             <!--右侧文章列表-->
             <section class="archive-card">
-                <div v-for="group in archiveGroups" :key="group.year">
-                    <!--年份行-->
-                    <div>{{ group.year }}</div>
-                    
-                    <!--文章列表-->
-                    <article
-                        v-for="article in group.articles" 
-                        :key="article.id"
-                        @click="goToDetail(article.id)">
-                        <!--日期-->
-                        <div class="archive-date">{{ formatTime(article.create_time) }}</div>
+              <!--加载状态-->
+              <el-skeleton v-if="loading" :rows="6" animated />
 
-                        <!--标题-->
-                        <div class="archive-title">{{ article.title }}</div>
+              <!--空状态-->
+              <el-empty v-else-if="archiveGroups.length === 0" description="暂无文章 " />
 
-                        <!--标签-->
-                        <div class="archive-tags">
-                            <span v-for="tag in article.tags" 
-                                :key="tag.id"
-                                >
-                                #{{ tag.name }}
-                            </span>
-                        </div>
-                    </article>
+
+
+              <div v-else>
+                <div v-for="group in archiveGroups" 
+                :key="group.year"
+                class="archive-group">
+                
+                  <!--年份行-->
+                  <div>{{ group.year }}</div>
+                  
+                  <!--文章列表-->
+                  <article
+                      v-for="article in group.articles" 
+                      :key="article.id"
+                      @click="goToDetail(article.id)">
+                      <!--日期-->
+                      <div class="archive-date">{{ formatTime(article.create_time) }}</div>
+
+                      <!--标题-->
+                      <div class="archive-title">{{ article.title }}</div>
+
+                      <!--标签-->
+                      <div class="archive-tags">
+                          <span v-for="tag in article.tags" 
+                              :key="tag.id"
+                              >
+                              #{{ tag.name }}
+                          </span>
+                      </div>
+                  </article>
                 </div>
+              </div>
             </section>
         </main>
     </div>
@@ -173,17 +186,24 @@ onMounted(() => {
 }
 
 .archive-card > div {
-  margin-bottom: 18px;
-}
-
-.archive-card > div:last-child {
   margin-bottom: 0;
 }
 
-.archive-card > div > div:first-child {
+.archive-group {
+  margin-bottom: 18px;
+}
+
+.archive-group:last-child {
+  margin-bottom: 0;
+}
+
+.archive-group > div:first-child {
   position: relative;
+  box-sizing: border-box;
+  width: 10%;
+  min-width: 64px;
   height: 60px;
-  padding-right: calc(90% + 22px);
+  padding-right: 16px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -193,10 +213,10 @@ onMounted(() => {
   line-height: 1;
 }
 
-.archive-card > div > div:first-child::before {
+.archive-group > div:first-child::before {
   content: "";
   position: absolute;
-  left: calc(10% + 2px);
+  left: calc(100% + 1px);
   top: 50%;
   width: 12px;
   height: 12px;
@@ -206,14 +226,15 @@ onMounted(() => {
   transform: translate(-50%, -50%);
 }
 
-.archive-card > div > div:first-child::after {
+.archive-group > div:first-child::after {
   content: "文章";
   position: absolute;
-  left: calc(20% + 8px);
+  left: calc(200% + 8px);
   top: 50%;
   color: rgba(31, 36, 48, 0.46);
   font-size: 15px;
   font-weight: 600;
+  white-space: nowrap;
   transform: translateY(-50%);
 }
 
@@ -317,6 +338,26 @@ onMounted(() => {
   text-overflow: ellipsis;
 }
 
+.archive-card :deep(.el-skeleton) {
+  padding: 8px 0;
+}
+
+.archive-card :deep(.el-skeleton__item) {
+  border-radius: 10px;
+}
+
+.archive-card :deep(.el-empty) {
+  min-height: 440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.archive-card :deep(.el-empty__description p) {
+  color: rgba(31, 36, 48, 0.46);
+  font-size: 14px;
+}
+
 @media (max-width: 900px) {
   .archive-shell {
     grid-template-columns: 1fr;
@@ -333,20 +374,25 @@ onMounted(() => {
     padding: 20px 16px 24px;
   }
 
-  .archive-card > div > div:first-child {
+  .archive-group > div:first-child {
+    width: 14%;
     height: 52px;
-    padding-right: calc(86% + 16px);
+    min-width: 54px;
+    padding-right: 12px;
     font-size: 24px;
   }
 
-  .archive-card > div > div:first-child::before,
+  .archive-group > div:first-child::before {
+    left: calc(100% + 1px);
+  }
+
   .archive-card article::before,
   .archive-card article::after {
     left: calc(14% + 1px);
   }
 
-  .archive-card > div > div:first-child::after {
-    left: calc(28% + 8px);
+  .archive-group > div:first-child::after {
+    left: calc(200% + 8px);
   }
 
   .archive-card article {
