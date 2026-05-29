@@ -56,10 +56,11 @@ defineEmits(['select-category', 'select-tag'])
 
 .card {
   border: 1px solid rgba(31, 36, 48, 0.06);
-  border-radius: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
   backdrop-filter: blur(16px);
+  overflow: hidden;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -69,19 +70,19 @@ defineEmits(['select-category', 'select-tag'])
 .card:hover {
   border-color: rgba(47, 141, 244, 0.11);
   background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
 }
 
 .card:first-child {
-  padding: 13px 13px 19px;
+  padding: 12px 12px 18px;
   text-align: center;
 }
 
 .avatar {
   width: 100%;
-  aspect-ratio: 1 / 0.78;
+  aspect-ratio: 1 / 0.76;
   margin: 0 auto 16px;
-  border-radius: 13px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
   background:
@@ -117,7 +118,7 @@ defineEmits(['select-category', 'select-tag'])
 .card h1::after {
   content: "";
   display: block;
-  width: 22px;
+  width: 24px;
   height: 4px;
   margin: 12px auto 0;
   border-radius: 999px;
@@ -132,12 +133,12 @@ defineEmits(['select-category', 'select-tag'])
 }
 
 .card:not(:first-child) {
-  padding: 17px 18px 14px;
+  padding: 16px 16px 14px;
 }
 
 .card h3 {
   position: relative;
-  margin: 0 0 13px;
+  margin: 0 0 14px;
   padding-left: 14px;
   color: rgba(31, 36, 48, 0.9);
   font-size: 17px;
@@ -156,9 +157,9 @@ defineEmits(['select-category', 'select-tag'])
 }
 
 .card button {
-  min-height: 34px;
+  min-height: 36px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 11px;
   background: transparent;
   color: rgba(31, 36, 48, 0.68);
   font-size: 13px;
@@ -174,17 +175,23 @@ defineEmits(['select-category', 'select-tag'])
 
 .card:nth-child(2) button {
   width: 100%;
-  margin: 0 0 4px;
-  padding: 0 10px;
+  margin: 0 0 6px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
+  background: rgba(31, 36, 48, 0.025);
+}
+
+.card:nth-child(2) button:last-child {
+  margin-bottom: 0;
 }
 
 .card:nth-child(3) button {
+  min-height: 32px;
   margin: 0 7px 8px 0;
-  padding: 6px 11px;
+  padding: 5px 11px;
   background: rgba(47, 141, 244, 0.07);
   color: rgba(47, 111, 171, 0.88);
 }
@@ -197,8 +204,9 @@ defineEmits(['select-category', 'select-tag'])
 
 .card:nth-child(2) button:hover,
 .card:nth-child(2) button.active {
-  padding-left: 14px;
+  padding-left: 15px;
   transform: translateX(1px);
+  box-shadow: inset 3px 0 0 rgba(47, 141, 244, 0.7);
 }
 
 .card:nth-child(3) button:hover,

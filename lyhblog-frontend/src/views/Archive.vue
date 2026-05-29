@@ -29,7 +29,7 @@
                 <div v-for="group in archiveGroups" 
                 :key="group.year"
                 class="archive-group">
-                
+              
                   <!--年份行-->
                   <div>{{ group.year }}</div>
                   
@@ -177,11 +177,11 @@ onMounted(() => {
 
 .archive-card {
   min-height: 520px;
-  padding: 24px 32px 30px;
+  padding: 24px 32px 28px;
   border: 1px solid rgba(31, 36, 48, 0.06);
-  border-radius: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.032);
   backdrop-filter: blur(16px);
 }
 
@@ -189,14 +189,17 @@ onMounted(() => {
   margin-bottom: 0;
 }
 
+.archive-card > div > div,
 .archive-group {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
+.archive-card > div > div:last-child,
 .archive-group:last-child {
   margin-bottom: 0;
 }
 
+.archive-card > div > div > div:first-child,
 .archive-group > div:first-child {
   position: relative;
   box-sizing: border-box;
@@ -207,12 +210,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  color: rgba(31, 36, 48, 0.76);
+  color: rgba(31, 36, 48, 0.78);
   font-size: 26px;
   font-weight: 800;
   line-height: 1;
 }
 
+.archive-card > div > div > div:first-child::before,
 .archive-group > div:first-child::before {
   content: "";
   position: absolute;
@@ -220,18 +224,20 @@ onMounted(() => {
   top: 50%;
   width: 12px;
   height: 12px;
-  border: 3px solid rgba(47, 141, 244, 0.28);
+  border: 3px solid rgba(47, 141, 244, 0.56);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
   transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.96);
 }
 
+.archive-card > div > div > div:first-child::after,
 .archive-group > div:first-child::after {
   content: "文章";
   position: absolute;
   left: calc(200% + 8px);
   top: 50%;
-  color: rgba(31, 36, 48, 0.46);
+  color: rgba(31, 36, 48, 0.42);
   font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
@@ -245,12 +251,13 @@ onMounted(() => {
   grid-template-columns: 10% minmax(0, 1fr) 18%;
   align-items: center;
   gap: 20px;
-  border-radius: 10px;
+  border-radius: 11px;
   color: rgba(31, 36, 48, 0.74);
   cursor: pointer;
   transition:
     background 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .archive-card article::before {
@@ -259,7 +266,7 @@ onMounted(() => {
   left: calc(10% + 1px);
   top: 0;
   bottom: 0;
-  border-left: 2px dashed rgba(31, 36, 48, 0.1);
+  border-left: 1px dashed rgba(31, 36, 48, 0.12);
 }
 
 .archive-card article::after {
@@ -267,11 +274,11 @@ onMounted(() => {
   position: absolute;
   left: calc(10% + 1px);
   top: 50%;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border: 4px solid rgba(255, 255, 255, 0.96);
   border-radius: 999px;
-  background: rgba(47, 141, 244, 0.42);
+  background: rgba(31, 36, 48, 0.34);
   box-shadow: 0 0 0 1px rgba(47, 141, 244, 0.08);
   transform: translate(-50%, -50%);
   transition:
@@ -282,11 +289,12 @@ onMounted(() => {
 }
 
 .archive-card article:hover {
-  background: rgba(47, 141, 244, 0.07);
+  background: rgba(47, 141, 244, 0.075);
+  transform: translateX(1px);
 }
 
 .archive-card article:hover::after {
-  width: 7px;
+  width: 5px;
   height: 20px;
   background: #2f8df4;
   box-shadow: 0 0 0 1px rgba(47, 141, 244, 0.16);
@@ -294,7 +302,7 @@ onMounted(() => {
 
 .archive-date {
   padding-right: 16px;
-  color: rgba(31, 36, 48, 0.5);
+  color: rgba(31, 36, 48, 0.46);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.2;
@@ -304,7 +312,7 @@ onMounted(() => {
 .archive-title {
   min-width: 0;
   padding: 0 8px 0 16px;
-  color: rgba(31, 36, 48, 0.76);
+  color: rgba(31, 36, 48, 0.78);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
@@ -318,7 +326,7 @@ onMounted(() => {
 
 .archive-card article:hover .archive-title {
   color: #2f8df4;
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 .archive-tags {
@@ -327,7 +335,7 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   overflow: hidden;
-  color: rgba(31, 36, 48, 0.32);
+  color: rgba(31, 36, 48, 0.3);
   font-size: 13px;
   line-height: 1.2;
   white-space: nowrap;
@@ -374,6 +382,7 @@ onMounted(() => {
     padding: 20px 16px 24px;
   }
 
+  .archive-card > div > div > div:first-child,
   .archive-group > div:first-child {
     width: 14%;
     height: 52px;
@@ -382,6 +391,7 @@ onMounted(() => {
     font-size: 24px;
   }
 
+  .archive-card > div > div > div:first-child::before,
   .archive-group > div:first-child::before {
     left: calc(100% + 1px);
   }
@@ -391,6 +401,7 @@ onMounted(() => {
     left: calc(14% + 1px);
   }
 
+  .archive-card > div > div > div:first-child::after,
   .archive-group > div:first-child::after {
     left: calc(200% + 8px);
   }

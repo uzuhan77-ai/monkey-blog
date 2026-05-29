@@ -23,8 +23,11 @@
                 <!--文章列表-->
                 <el-skeleton v-if="loading" :rows="6" animated />
                 
-                <el-empty v-else-if="articleList.length === 0" description="暂无文章" />
+                <el-empty v-else-if="errorMessage" :description="errorMessage">
+                  <el-button type="primary" @click="getArticleList"> 重新加载</el-button>
+                </el-empty>
 
+                <el-empty v-else-if="articleList.length === 0" description="暂无文章" />
 
                 <div class="post-list" v-else>
                     <article
@@ -55,11 +58,17 @@
                         </div>
 
                         <p>{{item.summary || '暂无摘要'}}</p>     <!--文章摘要-->
+
+                        <div class="post-stats">
+                          <span>{{ getWordCount(item) }}字</span>
+                          <span> | </span>
+                          <span>{{ getReadingTime(item) }}分钟阅读</span>
+                        </div>
                     </article>
                 </div>
 
                 <!--分页-->
-                <div class="pagination-box">
+                <div  v-if="!loading && !errorMessage && total > size" class="pagination-box">
                   <el-pagination
                     background
                     layout="prev,pager,next"
@@ -93,6 +102,7 @@ const total = ref(0)
 const current = ref(1)
 const size = ref(6)
 const loading = ref(false)
+const errorMessage = ref('')
 
 const categoryId = ref(null)
 const tagId = ref(null)
@@ -125,6 +135,7 @@ const getLabelList = async () =>{
 
 const getArticleList = async () =>{
     loading.value = true   //开始加载，显示骨架
+    errorMessage.value = '' //清空错误信息
     try{
         const res = await ApiArticleList({
             current: current.value,
@@ -138,10 +149,13 @@ const getArticleList = async () =>{
         tagId: tagId.value,
         total: res.data.total
       })
-        articleList.value = res.data.data
-        total.value = res.data.total
+        articleList.value = res.data.data || []
+        total.value = res.data.total || 0
     }catch(error){
         console.error('文章加载失败',error)
+        errorMessage.value = '文章加载失败，请检查网络或稍后重试'
+        articleList.value = [] //清空文章列表
+        total.value = 0 //清空总数
     }finally{
         loading.value = false   //不管成功失败，加载结束
     }
@@ -188,6 +202,18 @@ const scrollToArticles = () =>{
      block: 'start',})
 }
 
+const stripHtml = (text = '') => {
+  return String(text).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+}
+
+const getWordCount = (item) => {
+  return stripHtml(item.content || item.summary || '').length
+}
+
+const getReadingTime = (item) => {
+  const count  = getWordCount(item)
+  return Math.max(1, Math.ceil(count / 300)) //假设每分钟阅读300字
+}
 
 onMounted(()=>{
     getCategoryList() //页面挂载完成后自动执行
@@ -385,6 +411,26 @@ watch(
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-wrap: pretty;
+}
+
+.post-stats {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(31, 36, 48, 0.34);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+.post-stats span:nth-child(2) {
+  color: rgba(31, 36, 48, 0.18);
+}
+
+.post-card:hover .post-stats {
+  color: rgba(31, 36, 48, 0.46);
 }
 
 .pagination-box {

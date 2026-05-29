@@ -34,8 +34,19 @@
                     ⌕
                   </button>
                 </div>
-                <router-link to="/login" class="ghost-link">登录</router-link>
-                <router-link to="/register" class="solid-link">注册</router-link>
+                <template v-if="userStore.isLogin">
+                  <router-link v-if="userStore.isAdmin" to="/admin/article" class="ghost-link">
+                    后台
+                  </router-link>
+                  <span class="login-user">{{ userStore.userInfo?.username || '用户' }}</span>
+                  <router-link to="/" class="solid-link" @click="handleLogout">
+                    退出
+                  </router-link>
+                </template> 
+                <template v-else>
+                  <router-link to="/login" class="ghost-link">登录</router-link>
+                  <router-link to="/register" class="solid-link">注册</router-link>
+                </template>
             </div>
         </div>
     </header>
@@ -44,10 +55,13 @@
 <script setup>
 import {useRoute, useRouter} from 'vue-router'
 import {ref,watch} from 'vue'
+import {ElMessage} from 'element-plus'
+import {useUserStore} from '../stores/user'
 
 const route = useRoute()
 const router = useRouter()
 const searchKeyword = ref('')
+const userStore = useUserStore()
 
 const handleHeaderSearch = () => {
   const keyword = searchKeyword.value.trim()
@@ -57,6 +71,12 @@ const handleHeaderSearch = () => {
     path: '/',
     query: {keyword},
   })
+}
+
+
+const handleLogout = () => {
+  userStore.logout()
+  ElMessage.success('已退出登录')
 }
 
 watch(
@@ -82,7 +102,7 @@ const isActive = (path) => route.path === path
 .front-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 50;
   padding: 0 24px;
   background: rgba(246, 248, 251, 0.76);
   backdrop-filter: blur(20px);
@@ -96,12 +116,12 @@ const isActive = (path) => route.path === path
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  gap: 14px;
   border: 1px solid rgba(31, 36, 48, 0.055);
   border-top: 0;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 18px 18px;
   background: rgba(255, 255, 255, 0.93);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
   backdrop-filter: blur(18px);
 }
 
@@ -110,7 +130,7 @@ const isActive = (path) => route.path === path
   align-items: center;
   gap: 9px;
   min-height: 52px;
-  padding: 0 14px;
+  padding: 0 18px;
   border-radius: 12px;
   text-decoration: none;
   color: #2f8df4;
@@ -122,6 +142,7 @@ const isActive = (path) => route.path === path
 
 .brand:hover {
   background: rgba(47, 141, 244, 0.08);
+  transform: translateY(-1px);
 }
 
 .brand:active {
@@ -146,15 +167,17 @@ const isActive = (path) => route.path === path
 }
 
 .nav-list {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
 }
 
 .nav-link {
   min-height: 44px;
-  padding: 0 18px;
-  border-radius: 11px;
+  padding: 0 20px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -170,7 +193,7 @@ const isActive = (path) => route.path === path
 
 .nav-link:hover,
 .nav-link.active {
-  background: rgba(47, 141, 244, 0.105);
+  background: rgba(47, 141, 244, 0.1);
   color: #2f8df4;
 }
 
@@ -182,17 +205,18 @@ const isActive = (path) => route.path === path
   display: flex;
   align-items: center;
   gap: 6px;
+  flex: 0 0 auto;
 }
 
 .header-search {
-  width: 172px;
+  width: 168px;
   height: 44px;
   padding: 0 7px 0 15px;
   display: flex;
   align-items: center;
   gap: 6px;
   border: 1px solid rgba(31, 36, 48, 0.07);
-  border-radius: 14px;
+  border-radius: 13px;
   background: rgba(255, 255, 255, 0.7);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
   transition:
@@ -203,7 +227,7 @@ const isActive = (path) => route.path === path
 }
 
 .header-search:focus-within {
-  width: 224px;
+  width: 214px;
   border-color: rgba(47, 141, 244, 0.22);
   background: rgba(255, 255, 255, 0.96);
   box-shadow:
@@ -249,11 +273,12 @@ const isActive = (path) => route.path === path
 }
 
 .ghost-link,
-.solid-link {
+.solid-link,
+.login-user {
   text-decoration: none;
   min-height: 44px;
   padding: 0 13px;
-  border-radius: 11px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -285,6 +310,16 @@ const isActive = (path) => route.path === path
   box-shadow: 0 10px 22px rgba(47, 141, 244, 0.2);
 }
 
+.login-user {
+  max-width: 116px;
+  background: rgba(31, 36, 48, 0.045);
+  color: rgba(31, 36, 48, 0.62);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgba(31, 36, 48, 0.04);
+}
+
 .ghost-link:active,
 .solid-link:active {
   transform: scale(0.96);
@@ -300,7 +335,7 @@ const isActive = (path) => route.path === path
     align-items: stretch;
     padding: 12px;
     gap: 10px;
-    border-radius: 0 0 16px 16px;
+    border-radius: 0 0 18px 18px;
   }
 
   .brand,
@@ -321,6 +356,10 @@ const isActive = (path) => route.path === path
   .nav-actions {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .login-user {
+    max-width: min(100%, 180px);
   }
 }
 

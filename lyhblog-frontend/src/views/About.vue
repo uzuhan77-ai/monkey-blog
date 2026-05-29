@@ -115,7 +115,17 @@
   .about-section {
     max-width: 1168px;
     margin: 0 auto;
-    padding: 28px 24px;
+    padding: 24px 24px;
+  }
+
+  .about-hero {
+    padding-top: 30px;
+    padding-bottom: 8px;
+  }
+
+  .about-section {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   
   .about-hero {
@@ -129,11 +139,24 @@
   .hero-side,
   .panel-card {
     padding: 30px;
-    border: 1px solid rgba(31, 36, 48, 0.06);
+    border: 1px solid rgba(31, 36, 48, 0.055);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.035);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
     backdrop-filter: blur(16px);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .hero-side:hover,
+  .panel-card:hover {
+    border-color: rgba(47, 141, 244, 0.12);
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.055);
+    transform: translateY(-1px);
   }
 
   .hero-main {
@@ -160,7 +183,9 @@
   
   .hero-main h1,
   .panel-card h2 {
+    position: relative;
     margin: 14px 0 0;
+    padding-left: 16px;
     color: rgba(31, 36, 48, 0.94);
     font-size: 36px;
     line-height: 1.24;
@@ -170,6 +195,18 @@
 
   .panel-card h2 {
     font-size: 28px;
+  }
+
+  .hero-main h1::before,
+  .panel-card h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.22em;
+    width: 4px;
+    height: 1.08em;
+    border-radius: 999px;
+    background: #2f8df4;
   }
   
   .hero-desc {
@@ -183,14 +220,29 @@
   .focus-list,
   .plain-list {
     margin: 18px 0 0;
-    padding-left: 18px;
+    padding-left: 0;
+    list-style: none;
     color: rgba(31, 36, 48, 0.68);
     line-height: 1.85;
   }
 
   .focus-list li,
   .plain-list li {
-    margin-bottom: 4px;
+    position: relative;
+    margin-bottom: 8px;
+    padding-left: 17px;
+  }
+
+  .focus-list li::before,
+  .plain-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.78em;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(47, 141, 244, 0.72);
   }
   
   .two-column {
@@ -209,7 +261,7 @@
     position: absolute;
     inset: 0 0 auto;
     height: 3px;
-    background: rgba(47, 141, 244, 0.2);
+    background: linear-gradient(90deg, rgba(47, 141, 244, 0.34), rgba(47, 141, 244, 0.06), transparent 76%);
   }
   
   .info-list {
@@ -220,9 +272,19 @@
   
   .info-item {
     padding: 16px;
-    border: 1px solid rgba(31, 36, 48, 0.05);
+    border: 1px solid rgba(31, 36, 48, 0.045);
     border-radius: 14px;
+    background: rgba(246, 250, 255, 0.56);
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .info-item:hover {
+    border-color: rgba(47, 141, 244, 0.12);
     background: rgba(47, 141, 244, 0.055);
+    transform: translateX(2px);
   }
   
   .info-item span {
@@ -248,11 +310,21 @@
   .skill-tag {
     min-height: 34px;
     padding: 8px 13px;
-    border-radius: 999px;
+    border-radius: 10px;
     background: rgba(47, 141, 244, 0.08);
     color: rgba(47, 111, 171, 0.9);
     font-size: 14px;
     font-weight: 600;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .skill-tag:hover {
+    background: rgba(47, 141, 244, 0.14);
+    color: #2f8df4;
+    transform: translateY(-1px);
   }
   
   @media (max-width: 1024px) {
