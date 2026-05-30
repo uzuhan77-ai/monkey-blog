@@ -340,7 +340,7 @@ watch(
   margin-bottom: 13px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px 10px;
 }
 
 .post-meta span {
@@ -348,6 +348,8 @@ watch(
   border-radius: 0;
   background: transparent;
   color: rgba(31, 36, 48, 0.5);
+  display: inline-flex;
+  align-items: center;
   font-weight: 500;
 }
 
@@ -359,6 +361,22 @@ watch(
 
 .post-meta span:first-child {
   color: rgba(31, 36, 48, 0.42);
+  gap: 6px;
+}
+
+.post-meta span:first-child::before {
+  content: "日";
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 36, 48, 0.045);
+  color: rgba(31, 36, 48, 0.42);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .post-meta span:not(:first-child) {
@@ -417,7 +435,7 @@ watch(
   margin-top: 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   color: rgba(31, 36, 48, 0.34);
   font-size: 13px;
   font-weight: 500;
@@ -426,11 +444,63 @@ watch(
 }
 
 .post-stats span:nth-child(2) {
-  color: rgba(31, 36, 48, 0.18);
+  display: none;
+}
+
+.post-stats span:first-child,
+.post-stats span:nth-child(3) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.post-stats span:first-child::before,
+.post-stats span:nth-child(3)::before {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 36, 48, 0.045);
+  color: rgba(31, 36, 48, 0.46);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.post-stats span:first-child::before {
+  content: "文";
+}
+
+.post-stats span:nth-child(3)::before {
+  content: "时";
 }
 
 .post-card:hover .post-stats {
   color: rgba(31, 36, 48, 0.46);
+}
+
+.content > :deep(.el-skeleton),
+.content > :deep(.el-empty) {
+  padding: 30px 26px;
+  border: 1px solid rgba(31, 36, 48, 0.055);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.026);
+  backdrop-filter: blur(16px);
+}
+
+.content > :deep(.el-empty__description p) {
+  color: rgba(31, 36, 48, 0.5);
+  font-weight: 600;
+}
+
+.content > :deep(.el-button) {
+  border-color: #2f8df4;
+  border-radius: 11px;
+  background: #2f8df4;
+  font-weight: 700;
 }
 
 .pagination-box {
@@ -495,6 +565,10 @@ watch(
 
   .post-card p {
     -webkit-line-clamp: 3;
+  }
+
+  .post-meta span:nth-child(n+4) {
+    display: none;
   }
 }
 </style>

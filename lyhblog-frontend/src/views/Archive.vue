@@ -31,7 +31,11 @@
                 class="archive-group">
               
                   <!--年份行-->
-                  <div>{{ group.year }}</div>
+                  <div class="archive-year">
+                      {{ group.year }}
+                      <span class="archive-year-count">{{ group.articles.length }}篇文章</span>
+                    
+                  </div>
                   
                   <!--文章列表-->
                   <article
@@ -216,8 +220,38 @@ onMounted(() => {
   line-height: 1;
 }
 
+.archive-year {
+  position: relative;
+  box-sizing: border-box;
+  width: 10%;
+  min-width: 64px;
+  height: 60px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: rgba(31, 36, 48, 0.78);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .archive-card > div > div > div:first-child::before,
 .archive-group > div:first-child::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + 1px);
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border: 3px solid rgba(47, 141, 244, 0.56);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.96);
+}
+
+.archive-year::before {
   content: "";
   position: absolute;
   left: calc(100% + 1px);
@@ -234,6 +268,26 @@ onMounted(() => {
 .archive-card > div > div > div:first-child::after,
 .archive-group > div:first-child::after {
   content: "文章";
+  position: absolute;
+  left: calc(200% + 8px);
+  top: 50%;
+  color: rgba(31, 36, 48, 0.42);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+.archive-year::after {
+  content: none;
+}
+
+.archive-card > div > div > .archive-year:first-child::after,
+.archive-group > .archive-year:first-child::after {
+  content: none;
+}
+
+.archive-year-count {
   position: absolute;
   left: calc(200% + 8px);
   top: 50%;
@@ -383,7 +437,8 @@ onMounted(() => {
   }
 
   .archive-card > div > div > div:first-child,
-  .archive-group > div:first-child {
+  .archive-group > div:first-child,
+  .archive-year {
     width: 14%;
     height: 52px;
     min-width: 54px;
@@ -392,7 +447,8 @@ onMounted(() => {
   }
 
   .archive-card > div > div > div:first-child::before,
-  .archive-group > div:first-child::before {
+  .archive-group > div:first-child::before,
+  .archive-year::before {
     left: calc(100% + 1px);
   }
 
@@ -403,6 +459,10 @@ onMounted(() => {
 
   .archive-card > div > div > div:first-child::after,
   .archive-group > div:first-child::after {
+    left: calc(200% + 8px);
+  }
+
+  .archive-year-count {
     left: calc(200% + 8px);
   }
 

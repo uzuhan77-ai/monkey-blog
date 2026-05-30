@@ -6,6 +6,15 @@
                 <strong>LYH Blog</strong>
             </router-link>
 
+            <button
+              class="mobile-menu-button"
+              :class="{'is-open':isMobileMenuOpen}"
+              type="button"
+              @click="isMobileMenuOpen = !isMobileMenuOpen"
+            >
+              <span class="mobile-menu-icon"></span>            
+            </button>
+
             <nav class="nav-list">
                 <router-link
                     v-for="item in navItems"
@@ -14,8 +23,8 @@
                     class="nav-link"
                     :class="{active:isActive(item.path)}"
                 >
-                    {{ item.label }}
-            </router-link>
+                    {{ item.label }}  
+                </router-link>
             </nav>
 
             <div class="nav-actions">
@@ -48,6 +57,20 @@
                   <router-link to="/register" class="solid-link">注册</router-link>
                 </template>
             </div>
+
+            <div class="mobile-menu-panel" :class="{'is-open': isMobileMenuOpen}">
+              <router-link
+                v-for="item in navItems"
+                :key="item.path"
+                :to="item.path"
+                class="mobile-menu-link"
+                :class="{active:isActive(item.path)}"
+                @click="isMobileMenuOpen = false"
+              >
+                <span>{{ item.label }}</span>
+                <span class="mobile-menu-chevron">›</span>
+              </router-link>
+         </div>
         </div>
     </header>
 </template>
@@ -62,6 +85,8 @@ const route = useRoute()
 const router = useRouter()
 const searchKeyword = ref('')
 const userStore = useUserStore()
+
+const isMobileMenuOpen = ref(false)
 
 const handleHeaderSearch = () => {
   const keyword = searchKeyword.value.trim()
@@ -93,7 +118,8 @@ const navItems = [
     {path: '/project', label:'项目'},
     {path:'/about', label:'关于'}
 ]
-const isActive = (path) => route.path === path
+const isActive = (path) => route.path === path  
+
 
 
 </script>
@@ -109,6 +135,7 @@ const isActive = (path) => route.path === path
 }
 
 .header-inner {
+  position: relative;
   max-width: 1168px;
   min-height: 72px;
   margin: 0 auto;
@@ -325,6 +352,137 @@ const isActive = (path) => route.path === path
   transform: scale(0.96);
 }
 
+.mobile-menu-button {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(31, 36, 48, 0.07);
+  border-radius: 13px;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(31, 36, 48, 0.76);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mobile-menu-button:hover,
+.mobile-menu-button.is-open {
+  border-color: rgba(47, 141, 244, 0.18);
+  background: rgba(47, 141, 244, 0.1);
+  color: #2f8df4;
+}
+
+.mobile-menu-button:active {
+  transform: scale(0.94);
+}
+
+.mobile-menu-icon {
+  position: relative;
+  width: 18px;
+  height: 14px;
+  display: block;
+}
+
+.mobile-menu-icon,
+.mobile-menu-icon::before,
+.mobile-menu-icon::after {
+  border-top: 2px solid currentColor;
+  border-radius: 999px;
+}
+
+.mobile-menu-icon::before,
+.mobile-menu-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 18px;
+}
+
+.mobile-menu-icon::before {
+  top: 4px;
+}
+
+.mobile-menu-icon::after {
+  top: 10px;
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 12px;
+  width: min(248px, calc(100vw - 32px));
+  padding: 8px;
+  border: 1px solid rgba(31, 36, 48, 0.07);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 18px 44px rgba(15, 23, 42, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.mobile-menu-panel.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.mobile-menu-link {
+  min-height: 44px;
+  padding: 0 12px 0 14px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-decoration: none;
+  color: rgba(31, 36, 48, 0.72);
+  font-size: 15px;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mobile-menu-link:hover,
+.mobile-menu-link.active {
+  background: rgba(47, 141, 244, 0.1);
+  color: #2f8df4;
+}
+
+.mobile-menu-link:active {
+  transform: scale(0.98);
+}
+
+.mobile-menu-chevron {
+  color: rgba(31, 36, 48, 0.28);
+  font-size: 18px;
+  line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-menu-link:hover .mobile-menu-chevron,
+.mobile-menu-link.active .mobile-menu-chevron {
+  color: #2f8df4;
+  transform: translateX(2px);
+}
+
 @media (max-width: 860px) {
   .front-header {
     padding: 0 14px;
@@ -360,6 +518,38 @@ const isActive = (path) => route.path === path
 
   .login-user {
     max-width: min(100%, 180px);
+  }
+
+  .mobile-menu-button {
+    display: grid;
+  }
+
+  .header-inner:has(.mobile-menu-button) {
+    min-height: 64px;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 12px;
+  }
+
+  .header-inner:has(.mobile-menu-button) .brand {
+    justify-content: flex-start;
+    padding: 0 10px;
+  }
+
+  .header-inner:has(.mobile-menu-button) .mobile-menu-button {
+    order: 3;
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  .header-inner:has(.mobile-menu-button) .nav-list,
+  .header-inner:has(.mobile-menu-button) .header-search {
+    display: none;
+  }
+
+  .header-inner:has(.mobile-menu-button) .nav-actions {
+    margin-left: auto;
+    justify-content: flex-end;
   }
 }
 
